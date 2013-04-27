@@ -120,13 +120,17 @@ public class RoomScreen extends GameScreen {
         }
         groundImage.dispose();
 
+        // loading wires
         Pixmap wireImage = new Pixmap(wireFile);
         wires = new ArrayList<Wire>();
         Color color = new Color();
         for (byte x = 0; x < wireImage.getWidth(); x++) {
             for (byte y = 0; y < wireImage.getHeight(); y++) {
                 Color.rgba8888ToColor(color, wireImage.getPixel(x, ROOM_SIZE-1-y));
-                if (color.a > 0) wires.add(new Wire(x, y, color.cpy()));
+                if (color.a > 0) {
+                    System.out.println("Alpha " + color.a);
+                    wires.add(new Wire(x, y, color.cpy()));
+                }
             }
         }
     }
