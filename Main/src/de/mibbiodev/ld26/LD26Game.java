@@ -12,17 +12,18 @@ public class LD26Game extends Game {
     public static final String TITLE = "LD26Game";
     public static final byte ROOM_SIZE = 16;
     public static final byte TILE_SIZE = 32;
+    public static final float BASE_TICK_TIME = 1/20f;
 
     @Override
     public void create() {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop){
             Gdx.app.getGraphics().setDisplayMode(
                     Gdx.app.getGraphics().getWidth(),
-                    TILE_SIZE*ROOM_SIZE,
+                    TILE_SIZE * ROOM_SIZE,
                     false
             );
         }
-        RoomScreen entryRoom = new RoomScreen(this, Color.GREEN, Gdx.files.internal("data/map01.png"));
+        RoomScreen entryRoom = new RoomScreen(this, Color.GREEN, "map01");
         setScreen(entryRoom);
     }
 

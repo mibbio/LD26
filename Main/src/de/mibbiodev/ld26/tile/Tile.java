@@ -25,12 +25,7 @@ public abstract class Tile {
 
         random = new Random();
         shade = random.nextFloat();
-        if (blocked) {
-            if (shade < BORDER_SHADE + 0.05f) shade = BORDER_SHADE + 0.05f;
-        } else {
-            if (shade < DARKEST_SHADE) shade = DARKEST_SHADE;
-            if (shade > BORDER_SHADE - 0.2f) shade = BORDER_SHADE - 0.2f;
-        }
+        clampShade();
 
         pixmap = new Pixmap(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
         texture = new Texture(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
@@ -40,7 +35,16 @@ public abstract class Tile {
         return !blocked;
     }
 
-    public abstract void tick();
+    protected void clampShade() {
+        if (blocked) {
+            if (shade < BORDER_SHADE + 0.05f) shade = BORDER_SHADE + 0.05f;
+        } else {
+            if (shade < DARKEST_SHADE) shade = DARKEST_SHADE;
+            if (shade > BORDER_SHADE - 0.2f) shade = BORDER_SHADE - 0.2f;
+        }
+    }
+
+    public abstract void tick(float tickTime);
 
     public abstract Texture getTexture(Color scheme);
 

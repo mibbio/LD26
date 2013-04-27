@@ -15,7 +15,7 @@ public class BorderTile extends Tile {
 
 
     @Override
-    public void tick() {
+    public void tick(float tickTime) {
         // TODO Auto-generated method stub
     }
 

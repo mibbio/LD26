@@ -59,5 +59,5 @@ public abstract class GameScreen implements Screen {
         batch.dispose();
     }
 
-    public abstract void tick();
+    public abstract void tick(float tickTime);
 }
