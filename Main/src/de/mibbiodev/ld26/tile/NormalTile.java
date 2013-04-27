@@ -24,12 +24,12 @@ public class NormalTile extends Tile {
 
     @Override
     public void tick(float tickTime) {
-        timeSinceLastTick += tickTime;
+        /*timeSinceLastTick += tickTime;
         if (timeSinceLastTick >= tileTickTime) {
             shade = random.nextFloat();
             clampShade();
             timeSinceLastTick = 0;
-        }
+        }*/
     }
 
     @Override
