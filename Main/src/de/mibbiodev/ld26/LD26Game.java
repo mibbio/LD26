@@ -22,7 +22,7 @@ public class LD26Game extends Game {
                     false
             );
         }
-        RoomScreen entryRoom = new RoomScreen(this, Color.ORANGE);
+        RoomScreen entryRoom = new RoomScreen(this, Color.GREEN, Gdx.files.internal("data/map01.png"));
         setScreen(entryRoom);
     }
 

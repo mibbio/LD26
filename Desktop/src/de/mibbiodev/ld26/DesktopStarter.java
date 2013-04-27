@@ -15,6 +15,7 @@ public class DesktopStarter {
         config.width = 800;
         config.height = 480;
         config.vSyncEnabled = true;
+        config.resizable = false;
         new LwjglApplication(new LD26Game(), config);
     }
 }
