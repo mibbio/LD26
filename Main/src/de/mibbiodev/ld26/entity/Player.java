@@ -46,9 +46,8 @@ public class Player extends MovableEntity {
         if (energyLevel < 0) energyLevel += energyLoss * tickTime;
         else energyLevel -= energyLoss * tickTime;
 
-        System.out.println(Math.abs(energyLevel));
         if (Math.abs(energyLevel) < 0.001f) {
-            System.out.println("insufficient energy");
+            //System.out.println("insufficient energy");
             // TODO energylevel auswerten
         }
 
