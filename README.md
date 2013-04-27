@@ -1,4 +1,7 @@
-# Template for my Ludum Dare 26 Project
+# My Ludum Dare 26 Project
+
+## Theme
+- minimalism
 
 ## Dependencies
 - just [**Libgdx**][1] *(nightly build)*
