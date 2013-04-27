@@ -65,10 +65,6 @@ public class RoomScreen extends GameScreen {
         return intersections;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
     @Override
     public void render(float delta) {
         if (isPaused) return;
