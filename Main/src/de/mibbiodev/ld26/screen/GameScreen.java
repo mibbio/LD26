@@ -25,6 +25,7 @@ public abstract class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
     }
 
@@ -39,10 +40,9 @@ public abstract class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false,
-                LD26Game.ROOM_SIZE * LD26Game.TILE_SIZE,
-                LD26Game.ROOM_SIZE * LD26Game.TILE_SIZE
-        );
+        float aspectRatio = (float) width / (float) height;
+        float size = LD26Game.ROOM_SIZE * LD26Game.TILE_SIZE;
+        camera.setToOrtho(false, size * aspectRatio, size);
     }
 
     @Override

@@ -9,14 +9,14 @@ import de.mibbiodev.ld26.LD26Game;
  */
 public class BorderTile extends Tile {
 
-    public BorderTile() {
-        super(true);
+    public BorderTile(float x, float y) {
+        super(true, x, y);
     }
 
 
     @Override
     public void tick(float tickTime) {
-        // TODO Auto-generated method stub
+        // TODO BorderTile tick
     }
 
     @Override

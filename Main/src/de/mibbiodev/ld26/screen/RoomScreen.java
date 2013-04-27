@@ -1,12 +1,15 @@
 package de.mibbiodev.ld26.screen;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.entity.Player;
+import de.mibbiodev.ld26.input.AppInput;
+import de.mibbiodev.ld26.input.PlayerInput;
 import de.mibbiodev.ld26.tile.*;
 
 /**
@@ -23,6 +26,8 @@ public class RoomScreen extends GameScreen {
 
     private Player player;
 
+    private InputMultiplexer inputMultiplexer;
+
     private float timeSinceLastTick = 0;
 
     public RoomScreen(Game game, Color schemeColor, String mapName) {
@@ -30,8 +35,26 @@ public class RoomScreen extends GameScreen {
         this.schemeColor = schemeColor;
         groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
         wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
+        player = new Player(
+                new Pixmap(Gdx.files.internal("data/entities/player2.png")),
+                new Vector2(2, 2),
+                2f, this
+        );
 
-        player = new Player(Gdx.files.internal("data/entities/player2.png"));
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(new PlayerInput(player));
+        inputMultiplexer.addProcessor(new AppInput(game));
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    public Tile getInsection(Rectangle bounds) {
+        for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
+            for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
+                if (roomTiles[x][y].getBounds().overlaps(bounds)) return roomTiles[x][y];
+            }
+        }
+        return null;
     }
 
     @Override
@@ -71,9 +94,9 @@ public class RoomScreen extends GameScreen {
                 int t = groundImage.getPixel(x, ROOM_SIZE-1-y);
 
                 if (t == Color.rgba8888(Color.BLACK)) {
-                    roomTiles[x][y] = new BorderTile();
+                    roomTiles[x][y] = new BorderTile(x, y);
                 } else if (t == Color.rgba8888(Color.WHITE)) {
-                    roomTiles[x][y] = new NormalTile(2f);
+                    roomTiles[x][y] = new NormalTile(2f, x, y);
                 }
             }
         }
@@ -106,6 +129,6 @@ public class RoomScreen extends GameScreen {
             }
         }
 
-        player.tick();
+        player.tick(tickTime);
     }
 }

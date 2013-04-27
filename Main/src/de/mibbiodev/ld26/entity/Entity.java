@@ -1,27 +1,45 @@
 package de.mibbiodev.ld26.entity;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import de.mibbiodev.ld26.LD26Game;
+import de.mibbiodev.ld26.screen.RoomScreen;
 
 /**
  * @author mibbio
  */
 public abstract class Entity {
 
-    public enum Orientation {
-        NORTH, EAST, SOUTH, WEST
+    protected RoomScreen room;
+    protected Pixmap rawImage;
+    protected Texture renderTexture;
+    protected Orientation orientation = Orientation.NORTH;
+    protected Vector2 position;
+    protected Rectangle bounds;
+
+    protected Entity(Pixmap rawImage, Vector2 position, RoomScreen room) {
+        this.position = position;
+        this.rawImage = rawImage;
+        this.room = room;
+        this.renderTexture = new Texture(rawImage);
+        bounds = new Rectangle(position.x, position.y, rawImage.getWidth(), rawImage.getHeight());
     }
 
-    protected Pixmap rawImage;
+    public Vector2 getPosition() {
+        return position;
+    }
 
-    protected Vector2 position = Vector2.Zero;
-    protected Vector2 velocity = Vector2.Zero;
-    protected Orientation orientation = Orientation.NORTH;
+    public void setPosition(Vector2 position) {
+        this.position = position;
+        bounds.setX(position.x * LD26Game.TILE_SIZE);
+        bounds.setY(position.y * LD26Game.TILE_SIZE);
+    }
 
-    protected Entity(FileHandle imageFile) {
-        rawImage = new Pixmap(imageFile);
+    public Rectangle getBounds() {
+        return bounds;
     }
 
     public Orientation getOrientation() {
@@ -32,27 +50,15 @@ public abstract class Entity {
         this.orientation = orientation;
     }
 
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public void setPosition(Vector2 position) {
-        this.position = position;
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
-    }
-
     public void dispose() {
+        renderTexture.dispose();
         rawImage.dispose();
     }
 
-    public abstract void tick();
+    public void tick(float tickTime) {
+        bounds.setX(position.x * LD26Game.TILE_SIZE);
+        bounds.setY(position.y * LD26Game.TILE_SIZE);
+    }
 
     public abstract void draw(SpriteBatch batch);
 }

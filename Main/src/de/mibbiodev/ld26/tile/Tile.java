@@ -1,6 +1,7 @@
 package de.mibbiodev.ld26.tile;
 
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.math.Rectangle;
 import de.mibbiodev.ld26.LD26Game;
 
 import java.util.Random;
@@ -17,10 +18,11 @@ public abstract class Tile {
     protected float shade;
     protected Pixmap pixmap;
     protected Texture texture;
+    protected Rectangle bounds;
 
     protected Random random;
 
-    protected Tile(boolean blocked) {
+    protected Tile(boolean blocked, float x, float y) {
         this.blocked = blocked;
 
         random = new Random();
@@ -29,10 +31,16 @@ public abstract class Tile {
 
         pixmap = new Pixmap(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
         texture = new Texture(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
+
+        bounds = new Rectangle(x * LD26Game.TILE_SIZE, y * LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, LD26Game.TILE_SIZE);
     }
 
     public boolean isWalkable() {
         return !blocked;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
     }
 
     protected void clampShade() {

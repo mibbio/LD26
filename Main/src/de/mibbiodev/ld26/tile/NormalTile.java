@@ -12,13 +12,13 @@ public class NormalTile extends Tile {
     private float tileTickTime;
     private float timeSinceLastTick = 0;
 
-    public NormalTile() {
-        super(false);
+    public NormalTile(float x, float y) {
+        super(false, x, y);
         tileTickTime = LD26Game.BASE_TICK_TIME;
     }
 
-    public NormalTile(float tileTickTime) {
-        this();
+    public NormalTile(float tileTickTime, float x, float y) {
+        this(x, y);
         this.tileTickTime = tileTickTime;
     }
 
