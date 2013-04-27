@@ -16,7 +16,7 @@ public class PlayerInput implements InputProcessor {
     private static final int KEY_RIHT = Input.Keys.D;
 
     private Player player;
-    private int lastMovement = 0;
+    private int currentMovement = -1;
 
     public PlayerInput(Player player) {
         this.player = player;
@@ -24,6 +24,9 @@ public class PlayerInput implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
+        if (currentMovement > -1) return false;
+
+        currentMovement = keycode;
         switch (keycode) {
             case KEY_DOWN:
                 player.setOrientation(Orientation.SOUTH);
@@ -47,6 +50,8 @@ public class PlayerInput implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode != currentMovement) return false;
+        currentMovement = -1;
         switch (keycode) {
             case KEY_DOWN:
                 player.getVelocity().y = 0;

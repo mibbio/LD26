@@ -1,9 +1,9 @@
 package de.mibbiodev.ld26.entity;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.screen.RoomScreen;
+import de.mibbiodev.ld26.tile.Tile;
 
 /**
  * @author mibbio
@@ -33,19 +33,11 @@ public abstract class MovableEntity extends Entity {
         position.add(velocity.cpy().scl(tickTime * speed));
         super.tick(tickTime);
 
-        Rectangle newBounds = bounds;
-        switch (orientation) {
-            case EAST:
-                newBounds.x += bounds.getWidth();
-                break;
-            case NORTH:
-                newBounds.y += bounds.getHeight();
-                break;
-        }
-
-        if (!room.getInsection(newBounds).isWalkable()) {
-            position = oldPosition;
-            super.tick(tickTime);
+        for (Tile tile : room.getInsections(bounds)) {
+            if (!tile.isWalkable()) {
+                position = oldPosition;
+                super.tick(tickTime);
+            }
         }
     }
 }

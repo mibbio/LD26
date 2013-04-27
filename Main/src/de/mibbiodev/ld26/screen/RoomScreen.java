@@ -12,6 +12,9 @@ import de.mibbiodev.ld26.input.AppInput;
 import de.mibbiodev.ld26.input.PlayerInput;
 import de.mibbiodev.ld26.tile.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author mibbio
  */
@@ -48,13 +51,16 @@ public class RoomScreen extends GameScreen {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    public Tile getInsection(Rectangle bounds) {
+    public List<Tile> getInsections(Rectangle bounds) {
+        List<Tile> intersections = new ArrayList<Tile>();
         for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
             for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
-                if (roomTiles[x][y].getBounds().overlaps(bounds)) return roomTiles[x][y];
+                if (roomTiles[x][y].getBounds().overlaps(bounds)) {
+                    intersections.add(roomTiles[x][y]);
+                }
             }
         }
-        return null;
+        return intersections;
     }
 
     @Override
