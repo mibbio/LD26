@@ -16,7 +16,8 @@ public class Player extends MovableEntity {
     private Pixmap renderImage;
     private Color lampColor = Color.WHITE;
     private float lampBrightness = 0;
-    private float blinkStep = 0.05f;
+    private float energyLevel = 1f;
+    private float energyLoss = 0.02f;
 
     public Player(Pixmap rawImage, Vector2 position, float speed, RoomScreen room) {
         super(rawImage, position, speed, room);
@@ -33,13 +34,22 @@ public class Player extends MovableEntity {
 
     @Override
     public void tick(float tickTime) {
-        lampBrightness += blinkStep;
+        lampBrightness += energyLevel * tickTime;
         if (lampBrightness >= 1) {
             lampBrightness = 1;
-            blinkStep = -blinkStep;
+            energyLevel = -energyLevel;
         } else if (lampBrightness <= 0) {
             lampBrightness = 0;
-            blinkStep = -blinkStep;
+            energyLevel = -energyLevel;
+        }
+
+        if (energyLevel < 0) energyLevel += energyLoss * tickTime;
+        else energyLevel -= energyLoss * tickTime;
+
+        System.out.println(Math.abs(energyLevel));
+        if (Math.abs(energyLevel) < 0.001f) {
+            System.out.println("insufficient energy");
+            // TODO energylevel auswerten
         }
 
         for (byte x = 0; x < rawImage.getWidth(); x++) {

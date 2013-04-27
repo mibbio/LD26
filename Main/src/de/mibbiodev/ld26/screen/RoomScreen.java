@@ -27,6 +27,8 @@ public class RoomScreen extends GameScreen {
     private FileHandle wireFile;
     private Tile[][] roomTiles;
 
+    private List<Wire> wires;
+
     private Player player;
 
     private InputMultiplexer inputMultiplexer;
@@ -63,6 +65,10 @@ public class RoomScreen extends GameScreen {
         return intersections;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     @Override
     public void render(float delta) {
         if (isPaused) return;
@@ -81,6 +87,10 @@ public class RoomScreen extends GameScreen {
             }
         }
 
+        for (Wire wire : wires) {
+            batch.draw(wire.getTexture(null), wire.getBounds().x, wire.getBounds().y);
+        }
+
         player.draw(batch);
         renderEnd();
     }
@@ -93,6 +103,8 @@ public class RoomScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
+
+        // loading ground tiles and walls
         Pixmap groundImage = new Pixmap(groundFile);
         roomTiles = new Tile[ROOM_SIZE][ROOM_SIZE];
         for (byte x = 0; x < ROOM_SIZE; x++) {
@@ -107,6 +119,16 @@ public class RoomScreen extends GameScreen {
             }
         }
         groundImage.dispose();
+
+        Pixmap wireImage = new Pixmap(wireFile);
+        wires = new ArrayList<Wire>();
+        Color color = new Color();
+        for (byte x = 0; x < wireImage.getWidth(); x++) {
+            for (byte y = 0; y < wireImage.getHeight(); y++) {
+                Color.rgba8888ToColor(color, wireImage.getPixel(x, ROOM_SIZE-1-y));
+                if (color.a > 0) wires.add(new Wire(x, y, color.cpy()));
+            }
+        }
     }
 
     @Override
@@ -132,6 +154,13 @@ public class RoomScreen extends GameScreen {
         for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
             for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
                 roomTiles[x][y].tick(tickTime);
+            }
+        }
+
+        for (Wire wire : wires) {
+            wire.tick(tickTime);
+            if (wire.getBounds().overlaps(player.getBounds())) {
+                player.setLampColor(wire.getColor());
             }
         }
 
