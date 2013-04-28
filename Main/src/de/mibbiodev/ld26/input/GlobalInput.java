@@ -3,6 +3,8 @@ package de.mibbiodev.ld26.input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import de.mibbiodev.ld26.LD26Game;
+import de.mibbiodev.ld26.screen.MainMenuScreen;
+import de.mibbiodev.ld26.screen.SplashScreen;
 
 /**
  * @author mibbio
@@ -23,8 +25,13 @@ public class GlobalInput implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (game.getScreen() instanceof MainMenuScreen) return false;
+        if (game.getScreen() instanceof SplashScreen) {
+            game.handleAbort("null");
+            return true;
+        }
         if (keycode == KEY_BACK) {
-            game.handleAbort();
+            game.handleAbort("back");
         }
         return false;
     }

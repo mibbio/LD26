@@ -17,13 +17,20 @@ public class LD26Game extends Game {
     public static final byte TILE_SIZE = 32;
     public static final float BASE_TICK_TIME = 1/20f;
 
+    public String map = "map01";
+
     private GlobalInput globalInput;
     private SoundManager soundManager;
 
     private Music backgroundMusic;
 
+    // screens
+
     @Override
     public void create() {
+
+        System.out.println(Color.DARK_GRAY);
+
         // just filesystem tests
         FileHandle[] test = Gdx.files.internal("out").list();
 
@@ -49,8 +56,7 @@ public class LD26Game extends Game {
         backgroundMusic.setVolume(0.3f);
         backgroundMusic.play();
 
-        SplashScreen splash = new SplashScreen(this);
-        setScreen(splash);
+        setScreen(new SplashScreen(this));
     }
 
     @Override
@@ -69,11 +75,16 @@ public class LD26Game extends Game {
         return soundManager;
     }
 
-    public void handleAbort() {
+    public void handleAbort(String reason) {
         if(getScreen() instanceof GameScreen) {
-            Gdx.app.exit();
+            System.out.println("handleAbort 1 " + reason);
+            setScreen(new MainMenuScreen(this));
+            System.out.println("handleAbort 2");
         } else if (getScreen() instanceof SplashScreen) {
-            setScreen(new RoomScreen(this, Color.GREEN, "map01"));
+            setScreen(new MainMenuScreen(this));
+        } else if (getScreen() instanceof MainMenuScreen) {
+            if (reason.equals("exit")) Gdx.app.exit();
+            if (reason.equals("start")) setScreen(new RoomScreen(this, Color.GREEN, map));
         }
     }
 

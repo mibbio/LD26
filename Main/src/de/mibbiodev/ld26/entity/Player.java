@@ -18,7 +18,6 @@ public class Player extends MovableEntity implements Energized {
     private Color lampColor = Color.WHITE;
     private float lampBrightness = 0;
     private float energyLevel = 1f;
-    private float energyLoss = 0.01f;
     private float pulseStep = 1f;
 
     public Player(Pixmap rawImage, Vector2 position, float speed, RoomScreen room) {
@@ -82,11 +81,12 @@ public class Player extends MovableEntity implements Energized {
             pulseStep *= -1;
         }
 
+        float energyLoss = 0.01f;
         if (energyLevel < 0) energyLevel += energyLoss * tickTime;
         else energyLevel -= energyLoss * tickTime;
 
-        if (Math.abs(energyLevel) < 0.01f) {
-            // TODO end game if energy is to low
+        if (Math.abs(energyLevel) < 0.02f) {
+            room.abortReaseon = "dead";
         }
 
         for (byte x = 0; x < rawImage.getWidth(); x++) {

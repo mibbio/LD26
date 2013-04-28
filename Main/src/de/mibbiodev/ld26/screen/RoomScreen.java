@@ -21,6 +21,8 @@ public class RoomScreen extends GameScreen {
 
     private static final byte ROOM_SIZE = LD26Game.ROOM_SIZE;
 
+    public String abortReaseon = "";
+
     private Color schemeColor;
     private FileHandle groundFile;
     private FileHandle wireFile;
@@ -29,7 +31,6 @@ public class RoomScreen extends GameScreen {
     private List<WireStrip> wireStrips;
     private List<EnergyOrb> orbs;
     private Player player;
-    private InputMultiplexer inputMultiplexer;
 
     private float timeSinceLastTick = 0;
 
@@ -38,9 +39,6 @@ public class RoomScreen extends GameScreen {
         this.schemeColor = schemeColor;
         groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
         wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
-
-
-
     }
 
     public List<Tile> getInsections(Rectangle bounds) {
@@ -67,6 +65,10 @@ public class RoomScreen extends GameScreen {
     @Override
     public void render(float delta) {
         if (isPaused) return;
+        if (!abortReaseon.equals("")) {
+            game.handleAbort(abortReaseon);
+            return;
+        }
 
         // calculate tick time
         timeSinceLastTick += delta;
@@ -106,6 +108,19 @@ public class RoomScreen extends GameScreen {
         // loading wires
         Pixmap wireImage = new Pixmap(wireFile);
         wireStrips = WireStrip.load(wireImage);
+
+        // creating orbs
+        orbs = new ArrayList<EnergyOrb>();
+        Color orbpixel = new Color();
+        for (byte x = 0; x < wireImage.getWidth(); x++) {
+            for (byte y = 0; y < wireImage.getHeight(); y++) {
+                int pixel = wireImage.getPixel(x, LD26Game.ROOM_SIZE - 1 - y);
+                Color.rgba8888ToColor(orbpixel, pixel);
+                if (orbpixel.equals(Color.LIGHT_GRAY)) {
+                    orbs.add(new EnergyOrb(x, y));
+                }
+            }
+        }
         wireImage.dispose();
 
         // loading ground tiles, walls and doors
@@ -119,6 +134,8 @@ public class RoomScreen extends GameScreen {
                     roomTiles[x][y] = new BorderTile(x, y);
                 } else if (t == Color.rgba8888(Color.WHITE)) {
                     roomTiles[x][y] = new NormalTile(x, y);
+                } else  if (t == Color.rgba8888(Color.DARK_GRAY)) {
+                    roomTiles[x][y] = new ExitTile(x, y);
                 } else {
                     Color doorColor = new Color();
                     Color.rgba8888ToColor(doorColor, t);
@@ -131,18 +148,13 @@ public class RoomScreen extends GameScreen {
         }
         groundImage.dispose();
 
-        // creating orbs
-        // TODO loading orbs from map image
-        orbs = new ArrayList<EnergyOrb>();
-        orbs.add(new EnergyOrb(1, 1));
-
         player = new Player(
                 new Pixmap(Gdx.files.internal("data/entities/player2.png")),
                 new Vector2(2, 2),
                 2f, this
         );
 
-        inputMultiplexer = new InputMultiplexer();
+        InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(new PlayerInput(player));
         inputMultiplexer.addProcessor(game.getGlobalInput());
 
@@ -156,6 +168,7 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void dispose() {
+        player.dispose();
         for (byte x = 0; x < ROOM_SIZE; x++) {
             for (byte y = 0; y < ROOM_SIZE; y++) {
                 roomTiles[x][y].dispose();
@@ -167,7 +180,6 @@ public class RoomScreen extends GameScreen {
         for (EnergyOrb orb : orbs) {
             orb.dispose();
         }
-        player.dispose();
         super.dispose();
     }
 

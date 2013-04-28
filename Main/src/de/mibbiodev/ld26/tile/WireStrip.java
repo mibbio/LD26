@@ -119,7 +119,7 @@ public class WireStrip implements Tickable, Energized, Disposable {
                 int pixel = wireImage.getPixel(x, LD26Game.ROOM_SIZE - 1 - y);
                 Color.rgba8888ToColor(color, pixel);
 
-                if (color.a > 0) {
+                if (color.a > 0 && !color.equals(Color.LIGHT_GRAY)) {
                     Color keyColor = color.cpy();
                     keyColor.a = 1;
                     if (wireMap.containsKey(keyColor)) {

@@ -3,6 +3,7 @@ package de.mibbiodev.ld26.entity;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.screen.RoomScreen;
+import de.mibbiodev.ld26.tile.ExitTile;
 import de.mibbiodev.ld26.tile.Tile;
 
 /**
@@ -34,6 +35,9 @@ public abstract class MovableEntity extends Entity {
         super.tick(tickTime);
 
         for (Tile tile : room.getInsections(bounds)) {
+            if (this instanceof Player && tile instanceof ExitTile) {
+                room.abortReaseon = "success";
+            }
             if (!tile.isWalkable()) {
                 position = oldPosition;
                 super.tick(tickTime);
