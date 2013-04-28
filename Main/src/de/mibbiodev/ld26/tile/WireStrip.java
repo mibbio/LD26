@@ -6,22 +6,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.Tickable;
+import de.mibbiodev.ld26.entity.Energized;
 
 import java.util.*;
 
 /**
  * @author mibbio
  */
-public class WireStrip implements Tickable {
+public class WireStrip implements Tickable, Energized {
 
     private Color color;
-    private float energy;
+    private float energyLevel;
     private Door door;
     private List<Wire> wires;
 
     public WireStrip(Color color, float initialEnergy) {
         this.color = color;
-        this.energy = initialEnergy;
+        this.energyLevel = initialEnergy;
         door = null;
         wires = new ArrayList<Wire>();
     }
@@ -42,12 +43,35 @@ public class WireStrip implements Tickable {
         this.door = door;
     }
 
-    public float getEnergy() {
-        return energy;
+    @Override
+    public float getEnergyLevel() {
+        return energyLevel;
     }
 
-    public void setEnergy(float energy) {
-        this.energy = energy;
+    @Override
+    public void setEnergyLevel(float energyLevel) {
+        this.energyLevel = energyLevel;
+        for (Wire wire : wires) {
+            wire.setEnergyLevel(energyLevel);
+        }
+    }
+
+    @Override
+    public void drainEnergy(Energized target, float amount) {
+        float targetEnergy = target.getEnergyLevel();
+        float myEnergy = this.getEnergyLevel();
+
+        if (targetEnergy > amount && (1-myEnergy) > amount) {
+            targetEnergy -= amount;
+            myEnergy += amount;
+            target.setEnergyLevel(targetEnergy);
+            this.setEnergyLevel(myEnergy);
+        }
+    }
+
+    @Override
+    public void addEnergy(Energized target, float amount) {
+        target.drainEnergy(this, amount);
     }
 
     public void draw(SpriteBatch batch) {

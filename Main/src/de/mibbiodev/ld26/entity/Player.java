@@ -11,13 +11,14 @@ import de.mibbiodev.ld26.screen.RoomScreen;
 /**
  * @author mibbio
  */
-public class Player extends MovableEntity {
+public class Player extends MovableEntity implements Energized {
 
     private Pixmap renderImage;
     private Color lampColor = Color.WHITE;
     private float lampBrightness = 0;
     private float energyLevel = 1f;
     private float energyLoss = 0.02f;
+    private float pulseStep = 1f;
 
     public Player(Pixmap rawImage, Vector2 position, float speed, RoomScreen room) {
         super(rawImage, position, speed, room);
@@ -33,21 +34,50 @@ public class Player extends MovableEntity {
     }
 
     @Override
+    public void setEnergyLevel(float energyLevel) {
+        this.energyLevel = energyLevel;
+    }
+
+    @Override
+    public float getEnergyLevel() {
+        return Math.abs(energyLevel);
+    }
+
+    @Override
+    public void drainEnergy(Energized target, float amount) {
+        float targetEnergy = target.getEnergyLevel();
+        float myEnergy = this.getEnergyLevel();
+
+        if (targetEnergy > amount && (1-myEnergy) > amount) {
+            targetEnergy -= amount;
+            myEnergy += amount;
+            target.setEnergyLevel(targetEnergy);
+            this.setEnergyLevel(myEnergy);
+
+        }
+    }
+
+    @Override
+    public void addEnergy(Energized target, float amount) {
+        target.drainEnergy(this, amount);
+    }
+
+    @Override
     public void tick(float tickTime) {
-        lampBrightness += energyLevel * tickTime;
-        if (lampBrightness >= 1) {
-            lampBrightness = 1;
-            energyLevel = -energyLevel;
+        float maxStrength = Math.min((0.2f + energyLevel), 1.0f);
+        lampBrightness += pulseStep * tickTime;
+        if (lampBrightness >= maxStrength) {
+            lampBrightness = maxStrength;
+            pulseStep *= -1;
         } else if (lampBrightness <= 0) {
             lampBrightness = 0;
-            energyLevel = -energyLevel;
+            pulseStep *= -1;
         }
 
         if (energyLevel < 0) energyLevel += energyLoss * tickTime;
         else energyLevel -= energyLoss * tickTime;
 
-        if (Math.abs(energyLevel) < 0.001f) {
-            //System.out.println("insufficient energy");
+        if (Math.abs(energyLevel) < 0.01f) {
             // TODO energylevel auswerten
             // TODO energylevel evtl. eher für maximale helligkeit nutzen oder and die raumausleuchtung vom robot koppeln
         }
