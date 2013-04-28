@@ -12,8 +12,11 @@ public class Door extends Tile {
     protected static final Texture LOCKED_IMAGE = new Texture(Gdx.files.internal("data/entities/door_locked.png"));
     protected static final Texture UNLOCKED_IMAGE = new Texture(Gdx.files.internal("data/entities/door_unlocked.png"));
 
-    protected Door(float x, float y) {
+    private Color color;
+
+    protected Door(float x, float y, Color color) {
         super(true, x, y);
+        this.color = color;
     }
 
     public void lock() {
@@ -22,6 +25,10 @@ public class Door extends Tile {
 
     public void unlock() {
         blocked = false;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override
