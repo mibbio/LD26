@@ -7,12 +7,8 @@ import com.badlogic.gdx.graphics.*;
  * @author mibbio
  */
 public class Door extends Tile {
-
-    //protected static final Texture LOCKED_IMAGE = new Texture(Gdx.files.internal("data/entities/door_locked.png"));
-    //protected static final Texture UNLOCKED_IMAGE = new Texture(Gdx.files.internal("data/entities/door_unlocked.png"));
-
-    public static final Pixmap LOCKED_IMAGE = new Pixmap(Gdx.files.internal("data/entities/door_locked.png"));
-    public static final Pixmap UNLOCKED_IMAGE = new Pixmap(Gdx.files.internal("data/entities/door_unlocked.png"));
+    public static final String LOCKED_IMAGE = "data/entities/door_locked.png";
+    public static final String UNLOCKED_IMAGE = "data/entities/door_unlocked.png";
 
     private Color color;
 
@@ -38,22 +34,24 @@ public class Door extends Tile {
 
     @Override
     public Texture getTexture(Color scheme) {
-        return texture;
+        return tileTexture;
     }
 
     @Override
     public void tick(float tickTime) {}
 
-    private void refreshTexture(Pixmap source) {
-        pixmap.setColor(Color.CLEAR);
-        pixmap.fill();
-        for (byte x = 0; x < pixmap.getWidth(); x++) {
-            for (byte y = 0; y < pixmap.getHeight(); y++) {
+    private void refreshTexture(String fileName) {
+        Pixmap source = new Pixmap(Gdx.files.internal(fileName));
+        pixelMap.setColor(Color.CLEAR);
+        pixelMap.fill();
+        for (byte x = 0; x < pixelMap.getWidth(); x++) {
+            for (byte y = 0; y < pixelMap.getHeight(); y++) {
                 if (source.getPixel(x, y) == 255) {
-                    pixmap.drawPixel(x, y, Color.rgba8888(color));
+                    pixelMap.drawPixel(x, y, Color.rgba8888(color));
                 }
             }
         }
-        texture.draw(pixmap, 0, 0);
+        source.dispose();
+        tileTexture.draw(pixelMap, 0, 0);
     }
 }

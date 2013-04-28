@@ -18,8 +18,8 @@ public abstract class Tile implements Tickable, Disposable {
 
     protected boolean blocked = false;
     protected float shade;
-    protected Pixmap pixmap;
-    protected Texture texture;
+    protected Pixmap pixelMap;
+    protected Texture tileTexture;
     protected Rectangle bounds;
 
     protected Random random;
@@ -31,8 +31,8 @@ public abstract class Tile implements Tickable, Disposable {
         shade = random.nextFloat();
         clampShade();
 
-        pixmap = new Pixmap(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
-        texture = new Texture(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
+        pixelMap = new Pixmap(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
+        tileTexture = new Texture(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
 
         bounds = new Rectangle(x * LD26Game.TILE_SIZE, y * LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, LD26Game.TILE_SIZE);
     }
@@ -56,8 +56,8 @@ public abstract class Tile implements Tickable, Disposable {
 
     @Override
     public void dispose() {
-        texture.dispose();
-        pixmap.dispose();
+        tileTexture.dispose();
+        pixelMap.dispose();
     }
 
     public abstract Texture getTexture(Color scheme);

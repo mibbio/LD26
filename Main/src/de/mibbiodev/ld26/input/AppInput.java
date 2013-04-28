@@ -1,6 +1,7 @@
 package de.mibbiodev.ld26.input;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import de.mibbiodev.ld26.LD26Game;
 
 /**
@@ -9,9 +10,9 @@ import de.mibbiodev.ld26.LD26Game;
 public class AppInput implements InputProcessor {
     private static final int KEY_BACK = Input.Keys.ESCAPE;
 
-    Game game;
+    LD26Game game;
 
-    public AppInput(Game game) {
+    public AppInput(LD26Game game) {
         this.game = game;
     }
 
@@ -23,8 +24,7 @@ public class AppInput implements InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == KEY_BACK) {
-            ((LD26Game)game).setAbort(true);
-            //Gdx.app.exit();
+            game.handleAbort();
         }
         return false;
     }

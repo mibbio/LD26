@@ -1,6 +1,7 @@
 package de.mibbiodev.ld26.screen;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -8,7 +9,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.entity.Player;
-import de.mibbiodev.ld26.input.AppInput;
 import de.mibbiodev.ld26.input.PlayerInput;
 import de.mibbiodev.ld26.tile.*;
 
@@ -33,22 +33,14 @@ public class RoomScreen extends GameScreen {
 
     private float timeSinceLastTick = 0;
 
-    public RoomScreen(Game game, Color schemeColor, String mapName) {
+    public RoomScreen(LD26Game game, Color schemeColor, String mapName) {
         super(game);
         this.schemeColor = schemeColor;
         groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
         wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
-        player = new Player(
-                new Pixmap(Gdx.files.internal("data/entities/player2.png")),
-                new Vector2(2, 2),
-                2f, this
-        );
 
-        inputMultiplexer = new InputMultiplexer();
-        inputMultiplexer.addProcessor(new PlayerInput(player));
-        inputMultiplexer.addProcessor(new AppInput(game));
 
-        Gdx.input.setInputProcessor(inputMultiplexer);
+
     }
 
     public List<Tile> getInsections(Rectangle bounds) {
@@ -117,11 +109,11 @@ public class RoomScreen extends GameScreen {
                 if (t == Color.rgba8888(Color.BLACK)) {
                     roomTiles[x][y] = new BorderTile(x, y);
                 } else if (t == Color.rgba8888(Color.WHITE)) {
-                    roomTiles[x][y] = new NormalTile(2f, x, y);
+                    roomTiles[x][y] = new NormalTile(x, y);
                 } else {
                     Color doorColor = new Color();
                     Color.rgba8888ToColor(doorColor, t);
-                    roomTiles[x][y] = new NormalTile(2f, x, y);
+                    roomTiles[x][y] = new NormalTile(x, y);
                     for (WireStrip strip : wireStrips) {
                         if (strip.getColor().equals(doorColor)) strip.setDoor(new Door(x, y, doorColor));
                     }
@@ -135,8 +127,17 @@ public class RoomScreen extends GameScreen {
         orbs = new ArrayList<EnergyOrb>();
         orbs.add(new EnergyOrb(1, 1));
 
-        // create doors
-        // TODO creating doors
+        player = new Player(
+                new Pixmap(Gdx.files.internal("data/entities/player2.png")),
+                new Vector2(2, 2),
+                2f, this
+        );
+
+        inputMultiplexer = new InputMultiplexer();
+        inputMultiplexer.addProcessor(new PlayerInput(player));
+        inputMultiplexer.addProcessor(game.getAppInput());
+
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
@@ -146,8 +147,6 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void dispose() {
-        Door.UNLOCKED_IMAGE.dispose();
-        Door.LOCKED_IMAGE.dispose();
         for (byte x = 0; x < ROOM_SIZE; x++) {
             for (byte y = 0; y < ROOM_SIZE; y++) {
                 roomTiles[x][y].dispose();
@@ -165,8 +164,6 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void tick(float tickTime) {
-        if (((LD26Game)game).triesAbort()) Gdx.app.exit();
-
         for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
             for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
                 roomTiles[x][y].tick(tickTime);

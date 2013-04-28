@@ -17,7 +17,7 @@ public class EnergyOrb extends Wire {
         setEnergyLevel(1f);
         minEnergy = 0;
         pulseStep = super.pulseStep * 10f;
-        sprite = new Sprite(texture);
+        sprite = new Sprite(tileTexture);
     }
 
     @Override
@@ -28,10 +28,10 @@ public class EnergyOrb extends Wire {
     @Override
     public Texture getTexture(Color scheme) {
         super.getTexture(scheme);
-        pixmap.setColor(Color.WHITE);
-        pixmap.drawRectangle(MARGIN, MARGIN, pixmap.getWidth() - (2*MARGIN), pixmap.getHeight() - (2*MARGIN));
-        texture.draw(pixmap, 0, 0);
-        return texture;
+        pixelMap.setColor(Color.WHITE);
+        pixelMap.drawRectangle(MARGIN, MARGIN, pixelMap.getWidth() - (2*MARGIN), pixelMap.getHeight() - (2*MARGIN));
+        tileTexture.draw(pixelMap, 0, 0);
+        return tileTexture;
     }
 
     public void draw(SpriteBatch batch) {

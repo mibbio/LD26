@@ -1,7 +1,7 @@
 package de.mibbiodev.ld26.screen;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,19 +12,14 @@ import de.mibbiodev.ld26.LD26Game;
  */
 public abstract class GameScreen implements Screen {
 
-    protected Game game;
+    protected LD26Game game;
     protected SpriteBatch batch;
     protected OrthographicCamera camera;
     protected boolean isPaused = false;
 
-    protected Music bgMusic;
-
-    public GameScreen(Game game) {
+    public GameScreen(LD26Game game) {
         this.game = game;
         this.batch = new SpriteBatch();
-        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/track01.ogg"));
-        bgMusic.setVolume(0.1f);
-        bgMusic.setLooping(true);
     }
 
     public void renderStart() {
@@ -42,7 +37,6 @@ public abstract class GameScreen implements Screen {
     @Override
     public void show() {
         camera = new OrthographicCamera();
-        bgMusic.play();
     }
 
     @Override
@@ -64,7 +58,6 @@ public abstract class GameScreen implements Screen {
 
     public void dispose() {
         batch.dispose();
-        bgMusic.dispose();
     }
 
     public abstract void tick(float tickTime);

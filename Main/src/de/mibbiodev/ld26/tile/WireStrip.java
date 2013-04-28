@@ -150,5 +150,7 @@ public class WireStrip implements Tickable, Energized, Disposable {
         for (Wire wire : wires) {
             wire.dispose();
         }
+        wires = new ArrayList<Wire>();
+        door.dispose();
     }
 }

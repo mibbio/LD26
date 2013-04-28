@@ -46,10 +46,10 @@ public class Wire extends Tile implements Energized {
 
     @Override
     public Texture getTexture(Color scheme) {
-        pixmap.setColor(color.cpy().mul(pulseStrength));
-        pixmap.fillRectangle(MARGIN, MARGIN, pixmap.getWidth() - (2*MARGIN), pixmap.getHeight() - (2*MARGIN));
-        texture.draw(pixmap, 0, 0);
-        return texture;
+        pixelMap.setColor(color.cpy().mul(pulseStrength));
+        pixelMap.fillRectangle(MARGIN, MARGIN, pixelMap.getWidth() - (2*MARGIN), pixelMap.getHeight() - (2*MARGIN));
+        tileTexture.draw(pixelMap, 0, 0);
+        return tileTexture;
     }
 
     @Override
