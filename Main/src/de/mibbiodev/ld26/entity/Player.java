@@ -78,8 +78,8 @@ public class Player extends MovableEntity implements Energized {
         else energyLevel -= energyLoss * tickTime;
 
         if (Math.abs(energyLevel) < 0.01f) {
-            // TODO energylevel auswerten
-            // TODO energylevel evtl. eher für maximale helligkeit nutzen oder and die raumausleuchtung vom robot koppeln
+            // TODO end game if energy is to low
+            // energylevel evtl. eher für maximale helligkeit nutzen oder and die raumausleuchtung vom robot koppeln
         }
 
         for (byte x = 0; x < rawImage.getWidth(); x++) {

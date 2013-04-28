@@ -10,12 +10,13 @@ import de.mibbiodev.ld26.entity.Energized;
  */
 public class Wire extends Tile implements Energized {
 
-    private static final int MARGIN = LD26Game.TILE_SIZE / 4;
+    protected static final int MARGIN = LD26Game.TILE_SIZE / 4;
 
     private Color color;
-    private float energyLevel = 0;
-    private float pulseStep = 0.2f;
-    private float pulseStrength = 0;
+    protected float energyLevel = 0;
+    protected float minEnergy = 0.2f;
+    protected float pulseStep = 0.2f;
+    protected float pulseStrength = 0;
 
     public Wire(float x, float y, Color color) {
         super(false, x, y);
@@ -32,13 +33,13 @@ public class Wire extends Tile implements Energized {
 
     @Override
     public void tick(float tickTime) {
-        float maxStrength = Math.min((0.2f + energyLevel), 1.0f);
+        float maxStrength = Math.min((minEnergy + energyLevel), 1.0f);
         pulseStrength += pulseStep * tickTime;
         if (pulseStrength >= maxStrength) {
             pulseStrength = maxStrength;
             pulseStep *= -1;
-        } else if (pulseStrength <= 0.2f) {
-            pulseStrength = 0.2f;
+        } else if (pulseStrength <= minEnergy) {
+            pulseStrength = minEnergy;
             pulseStep *= -1;
         }
     }

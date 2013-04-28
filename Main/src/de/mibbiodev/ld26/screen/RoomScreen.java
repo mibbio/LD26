@@ -12,8 +12,7 @@ import de.mibbiodev.ld26.input.AppInput;
 import de.mibbiodev.ld26.input.PlayerInput;
 import de.mibbiodev.ld26.tile.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author mibbio
@@ -28,6 +27,7 @@ public class RoomScreen extends GameScreen {
     private Tile[][] roomTiles;
 
     private List<WireStrip> wireStrips;
+    private List<EnergyOrb> orbs;
     private Player player;
     private InputMultiplexer inputMultiplexer;
 
@@ -85,6 +85,10 @@ public class RoomScreen extends GameScreen {
             strip.draw(batch);
         }
 
+        for (EnergyOrb orb : orbs) {
+            orb.draw(batch);
+        }
+
         player.draw(batch);
         renderEnd();
     }
@@ -118,6 +122,10 @@ public class RoomScreen extends GameScreen {
         Pixmap wireImage = new Pixmap(wireFile);
         wireStrips = WireStrip.load(wireImage);
         wireImage.dispose();
+
+        // creating orbs
+        orbs = new ArrayList<EnergyOrb>();
+        orbs.add(new EnergyOrb(2, 2));
 
         // create doors
         // TODO creating doors
@@ -154,6 +162,19 @@ public class RoomScreen extends GameScreen {
             if (strip.overlaps(player.getBounds())) {
                 player.setLampColor(strip.getColor());
                 strip.drainEnergy(player, 0.2f * tickTime);
+            }
+        }
+
+
+        for (Iterator<EnergyOrb> orbIterator = orbs.iterator(); orbIterator.hasNext();) {
+            EnergyOrb orb = orbIterator.next();
+            if (orb.getEnergyLevel() <= 0.01f) {
+                orbIterator.remove();
+            } else {
+                orb.tick(tickTime);
+                if (orb.getBounds().overlaps(player.getBounds())) {
+                    player.drainEnergy(orb, 0.2f * tickTime);
+                }
             }
         }
 

@@ -47,11 +47,11 @@ public class AppInput implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;  // TODO Auto-generated method stub
+        return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        return false;  // TODO Auto-generated method stub
+        return false;
     }
 }

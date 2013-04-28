@@ -15,9 +15,7 @@ public class BorderTile extends Tile {
 
 
     @Override
-    public void tick(float tickTime) {
-        // TODO BorderTile tick
-    }
+    public void tick(float tickTime) {}
 
     @Override
     public Texture getTexture(Color scheme) {
