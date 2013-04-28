@@ -52,7 +52,16 @@ public class RoomScreen extends GameScreen {
                 }
             }
         }
+        for (WireStrip ws : wireStrips) {
+            if (ws.getDoor().getBounds().overlaps(bounds)) {
+                intersections.add(ws.getDoor());
+            }
+        }
         return intersections;
+    }
+
+    public LD26Game getGame() {
+        return game;
     }
 
     @Override
@@ -135,7 +144,7 @@ public class RoomScreen extends GameScreen {
 
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(new PlayerInput(player));
-        inputMultiplexer.addProcessor(game.getAppInput());
+        inputMultiplexer.addProcessor(game.getGlobalInput());
 
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
@@ -164,6 +173,7 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void tick(float tickTime) {
+        game.getSoundManager().tick(tickTime);
         for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
             for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
                 roomTiles[x][y].tick(tickTime);

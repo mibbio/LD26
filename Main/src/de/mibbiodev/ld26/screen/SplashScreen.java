@@ -42,7 +42,7 @@ public class SplashScreen implements Screen {
         splashTexture = new Texture(Gdx.files.internal("data/ui/splash_tmp.png"));
         splashSprite = new Sprite(splashTexture);
         batch = new SpriteBatch();
-        Gdx.input.setInputProcessor(game.getAppInput());
+        Gdx.input.setInputProcessor(game.getGlobalInput());
     }
 
     @Override

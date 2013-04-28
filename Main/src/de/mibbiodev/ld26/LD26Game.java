@@ -1,8 +1,9 @@
 package de.mibbiodev.ld26;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
-import de.mibbiodev.ld26.input.AppInput;
+import de.mibbiodev.ld26.input.GlobalInput;
 import de.mibbiodev.ld26.screen.*;
 
 /**
@@ -15,7 +16,10 @@ public class LD26Game extends Game {
     public static final byte TILE_SIZE = 32;
     public static final float BASE_TICK_TIME = 1/20f;
 
-    private AppInput appInput;
+    private GlobalInput globalInput;
+    private SoundManager soundManager;
+
+    private Music backgroundMusic;
 
     @Override
     public void create() {
@@ -27,7 +31,13 @@ public class LD26Game extends Game {
             );
         }
 
-        appInput = new AppInput(this);
+        globalInput = new GlobalInput(this);
+        soundManager = new SoundManager();
+
+        backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/track01.ogg"));
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(0.3f);
+        backgroundMusic.play();
 
         //RoomScreen entryRoom = new RoomScreen(this, Color.GREEN, "map01");
         //setScreen(entryRoom);
@@ -37,11 +47,18 @@ public class LD26Game extends Game {
 
     @Override
     public void dispose() {
+        backgroundMusic.stop();
+        soundManager.dispose();
+        backgroundMusic.dispose();
         super.dispose();
     }
 
-    public AppInput getAppInput() {
-        return appInput;
+    public GlobalInput getGlobalInput() {
+        return globalInput;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
     }
 
     public void handleAbort() {

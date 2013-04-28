@@ -7,12 +7,12 @@ import de.mibbiodev.ld26.LD26Game;
 /**
  * @author mibbio
  */
-public class AppInput implements InputProcessor {
+public class GlobalInput implements InputProcessor {
     private static final int KEY_BACK = Input.Keys.ESCAPE;
 
     LD26Game game;
 
-    public AppInput(LD26Game game) {
+    public GlobalInput(LD26Game game) {
         this.game = game;
     }
 

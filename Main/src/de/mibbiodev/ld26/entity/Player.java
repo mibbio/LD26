@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.screen.RoomScreen;
+import de.mibbiodev.ld26.tile.Wire;
 
 /**
  * @author mibbio
@@ -31,6 +32,11 @@ public class Player extends MovableEntity implements Energized {
 
     @Override
     public void setEnergyLevel(float energyLevel) {
+        if (this.energyLevel > energyLevel) {
+            room.getGame().getSoundManager().play("charge03", 0.75f, 0.75f,  getClass());
+        } else {
+            room.getGame().getSoundManager().play("charge03", 0.75f, 1.25f,  getClass());
+        }
         this.energyLevel = energyLevel;
     }
 
@@ -50,6 +56,10 @@ public class Player extends MovableEntity implements Energized {
             myEnergy += amount;
             target.setEnergyLevel(targetEnergy);
             this.setEnergyLevel(myEnergy);
+            if (target instanceof Wire) {
+                Wire w = (Wire)target;
+                lampColor = w.getColor();
+            }
             return true;
         }
         return false;
@@ -77,7 +87,6 @@ public class Player extends MovableEntity implements Energized {
 
         if (Math.abs(energyLevel) < 0.01f) {
             // TODO end game if energy is to low
-            // energylevel evtl. eher für maximale helligkeit nutzen oder and die raumausleuchtung vom robot koppeln
         }
 
         for (byte x = 0; x < rawImage.getWidth(); x++) {
