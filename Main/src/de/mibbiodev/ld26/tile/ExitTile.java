@@ -14,9 +14,7 @@ public class ExitTile extends Tile {
 
     @Override
     public Texture getTexture(Color scheme) {
-        Color exitColor = Color.WHITE;
-        exitColor.sub(scheme.cpy().mul(shade));
-        pixelMap.setColor(exitColor);
+        pixelMap.setColor(Color.WHITE.cpy().mul(shade));
         pixelMap.fill();
         pixelMap.setColor(Color.BLACK);
         tileTexture.draw(pixelMap, 0, 0);
