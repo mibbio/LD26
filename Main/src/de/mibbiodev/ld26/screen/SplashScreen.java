@@ -27,6 +27,11 @@ public class SplashScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        float dx = (splashTexture.getWidth() - Gdx.graphics.getWidth()) / 2f;
+        float dy = (splashTexture.getHeight() - Gdx.graphics.getHeight()) / 2f;
+
+        splashSprite.setPosition(dx, dy);
+
         batch.begin();
         splashSprite.draw(batch);
         batch.end();
@@ -39,7 +44,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void show() {
-        splashTexture = new Texture(Gdx.files.internal("data/ui/splash_tmp.png"));
+        splashTexture = new Texture(Gdx.files.internal("data/ui/splash.png"));
         splashSprite = new Sprite(splashTexture);
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(game.getGlobalInput());

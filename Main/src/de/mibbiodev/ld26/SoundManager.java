@@ -50,6 +50,7 @@ public class SoundManager implements Tickable, Disposable {
 
     @Override
     public void tick(float tickTime) {
+        if (alltimeTick > Float.MAX_VALUE - 10f) alltimeTick = 0;
         alltimeTick += tickTime;
     }
 }
