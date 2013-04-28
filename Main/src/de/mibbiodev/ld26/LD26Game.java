@@ -11,7 +11,7 @@ import de.mibbiodev.ld26.screen.*;
  */
 public class LD26Game extends Game {
 
-    public static final String TITLE = "LD26Game";
+    public static final String TITLE = "energized";
     public static final byte ROOM_SIZE = 16;
     public static final byte TILE_SIZE = 32;
     public static final float BASE_TICK_TIME = 1/20f;
