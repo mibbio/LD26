@@ -2,6 +2,7 @@ package de.mibbiodev.ld26;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import de.mibbiodev.ld26.input.GlobalInput;
 import de.mibbiodev.ld26.screen.*;
@@ -23,6 +24,15 @@ public class LD26Game extends Game {
 
     @Override
     public void create() {
+        // just filesystem tests
+        FileHandle[] test = Gdx.files.internal("out").list();
+
+        for (FileHandle handle : test) {
+            System.out.println(handle.name());
+        }
+        // end fs test
+
+
         if (Gdx.app.getType() == Application.ApplicationType.Desktop){
             Gdx.app.getGraphics().setDisplayMode(
                     LD26Game.TILE_SIZE * LD26Game.ROOM_SIZE,
@@ -39,8 +49,6 @@ public class LD26Game extends Game {
         backgroundMusic.setVolume(0.3f);
         backgroundMusic.play();
 
-        //RoomScreen entryRoom = new RoomScreen(this, Color.GREEN, "map01");
-        //setScreen(entryRoom);
         SplashScreen splash = new SplashScreen(this);
         setScreen(splash);
     }
