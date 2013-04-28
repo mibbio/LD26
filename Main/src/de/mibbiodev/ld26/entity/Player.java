@@ -17,16 +17,12 @@ public class Player extends MovableEntity implements Energized {
     private Color lampColor = Color.WHITE;
     private float lampBrightness = 0;
     private float energyLevel = 1f;
-    private float energyLoss = 0.02f;
+    private float energyLoss = 0.01f;
     private float pulseStep = 1f;
 
     public Player(Pixmap rawImage, Vector2 position, float speed, RoomScreen room) {
         super(rawImage, position, speed, room);
         renderImage = new Pixmap(rawImage.getWidth(), rawImage.getHeight(), rawImage.getFormat());
-    }
-
-    public Color getLampColor() {
-        return lampColor;
     }
 
     public void setLampColor(Color lampColor) {
@@ -44,7 +40,8 @@ public class Player extends MovableEntity implements Energized {
     }
 
     @Override
-    public void drainEnergy(Energized target, float amount) {
+    public boolean drainEnergy(Energized target, float amount) {
+        if (energyLevel > 0.95f) return false;
         float targetEnergy = target.getEnergyLevel();
         float myEnergy = this.getEnergyLevel();
 
@@ -53,13 +50,14 @@ public class Player extends MovableEntity implements Energized {
             myEnergy += amount;
             target.setEnergyLevel(targetEnergy);
             this.setEnergyLevel(myEnergy);
-
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void addEnergy(Energized target, float amount) {
-        target.drainEnergy(this, amount);
+    public boolean addEnergy(Energized target, float amount) {
+        return target.drainEnergy(this, amount);
     }
 
     @Override

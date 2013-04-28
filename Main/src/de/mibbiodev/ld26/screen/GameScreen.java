@@ -22,7 +22,7 @@ public abstract class GameScreen implements Screen {
     public GameScreen(Game game) {
         this.game = game;
         this.batch = new SpriteBatch();
-        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/bg01.ogg"));
+        bgMusic = Gdx.audio.newMusic(Gdx.files.internal("data/music/track01.ogg"));
         bgMusic.setVolume(0.1f);
         bgMusic.setLooping(true);
     }

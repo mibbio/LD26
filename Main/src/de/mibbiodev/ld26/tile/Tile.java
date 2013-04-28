@@ -2,6 +2,7 @@ package de.mibbiodev.ld26.tile;
 
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Disposable;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.Tickable;
 
@@ -10,7 +11,7 @@ import java.util.Random;
 /**
  * @author mibbio
  */
-public abstract class Tile implements Tickable {
+public abstract class Tile implements Tickable, Disposable {
 
     protected static final float DARKEST_SHADE = 0.5f;
     protected static final float BORDER_SHADE = 0.8f;
@@ -53,10 +54,11 @@ public abstract class Tile implements Tickable {
         }
     }
 
-    public abstract Texture getTexture(Color scheme);
-
+    @Override
     public void dispose() {
         texture.dispose();
         pixmap.dispose();
     }
+
+    public abstract Texture getTexture(Color scheme);
 }

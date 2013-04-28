@@ -9,7 +9,7 @@ public interface Energized {
 
     float getEnergyLevel();
 
-    void drainEnergy(Energized target, float amount);
+    boolean drainEnergy(Energized target, float amount);
 
-    void addEnergy(Energized target, float amount);
+    boolean addEnergy(Energized target, float amount);
 }

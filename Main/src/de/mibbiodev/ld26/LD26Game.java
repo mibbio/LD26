@@ -14,6 +14,8 @@ public class LD26Game extends Game {
     public static final byte TILE_SIZE = 32;
     public static final float BASE_TICK_TIME = 1/20f;
 
+    private boolean abort = false;
+
     @Override
     public void create() {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop){
@@ -30,5 +32,13 @@ public class LD26Game extends Game {
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    public void setAbort(boolean value) {
+        abort = value;
+    }
+
+    public boolean triesAbort() {
+        return abort;
     }
 }

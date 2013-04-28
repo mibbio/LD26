@@ -1,6 +1,7 @@
 package de.mibbiodev.ld26.input;
 
 import com.badlogic.gdx.*;
+import de.mibbiodev.ld26.LD26Game;
 
 /**
  * @author mibbio
@@ -21,7 +22,10 @@ public class AppInput implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == KEY_BACK) Gdx.app.exit();
+        if (keycode == KEY_BACK) {
+            ((LD26Game)game).setAbort(true);
+            //Gdx.app.exit();
+        }
         return false;
     }
 

@@ -63,8 +63,8 @@ public class Wire extends Tile implements Energized {
     }
 
     @Override
-    public void drainEnergy(Energized target, float amount) {}
+    public boolean drainEnergy(Energized target, float amount) { return false; }
 
     @Override
-    public void addEnergy(Energized target, float amount) {}
+    public boolean addEnergy(Energized target, float amount) { return false; }
 }

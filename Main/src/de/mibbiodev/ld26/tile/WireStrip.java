@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Disposable;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.Tickable;
 import de.mibbiodev.ld26.entity.Energized;
@@ -13,7 +14,7 @@ import java.util.*;
 /**
  * @author mibbio
  */
-public class WireStrip implements Tickable, Energized {
+public class WireStrip implements Tickable, Energized, Disposable {
 
     private Color color;
     private float energyLevel;
@@ -57,7 +58,9 @@ public class WireStrip implements Tickable, Energized {
     }
 
     @Override
-    public void drainEnergy(Energized target, float amount) {
+    public boolean drainEnergy(Energized target, float amount) {
+        if (this.getEnergyLevel() > 0.95f) return false;
+
         float targetEnergy = target.getEnergyLevel();
         float myEnergy = this.getEnergyLevel();
 
@@ -66,18 +69,21 @@ public class WireStrip implements Tickable, Energized {
             myEnergy += amount;
             target.setEnergyLevel(targetEnergy);
             this.setEnergyLevel(myEnergy);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void addEnergy(Energized target, float amount) {
-        target.drainEnergy(this, amount);
+    public boolean addEnergy(Energized target, float amount) {
+        return target.drainEnergy(this, amount);
     }
 
     public void draw(SpriteBatch batch) {
         for (Wire wire : wires) {
             batch.draw(wire.getTexture(null), wire.getBounds().x, wire.getBounds().y);
         }
+        if (door != null) batch.draw(door.getTexture(null), door.getBounds().x, door.getBounds().y);
     }
 
     public boolean overlaps(Rectangle rect) {
@@ -92,6 +98,8 @@ public class WireStrip implements Tickable, Energized {
         for (Wire wire : wires) {
             wire.tick(tickTime);
         }
+
+        if (energyLevel >= 0.95f) door.unlock();
     }
 
     @Override
@@ -135,5 +143,12 @@ public class WireStrip implements Tickable, Energized {
         }
 
         return finalList;
+    }
+
+    @Override
+    public void dispose() {
+        for (Wire wire : wires) {
+            wire.dispose();
+        }
     }
 }

@@ -102,7 +102,12 @@ public class RoomScreen extends GameScreen {
     public void show() {
         super.show();
 
-        // loading ground tiles and walls
+        // loading wires
+        Pixmap wireImage = new Pixmap(wireFile);
+        wireStrips = WireStrip.load(wireImage);
+        wireImage.dispose();
+
+        // loading ground tiles, walls and doors
         Pixmap groundImage = new Pixmap(groundFile);
         roomTiles = new Tile[ROOM_SIZE][ROOM_SIZE];
         for (byte x = 0; x < ROOM_SIZE; x++) {
@@ -113,19 +118,22 @@ public class RoomScreen extends GameScreen {
                     roomTiles[x][y] = new BorderTile(x, y);
                 } else if (t == Color.rgba8888(Color.WHITE)) {
                     roomTiles[x][y] = new NormalTile(2f, x, y);
+                } else {
+                    Color doorColor = new Color();
+                    Color.rgba8888ToColor(doorColor, t);
+                    roomTiles[x][y] = new NormalTile(2f, x, y);
+                    for (WireStrip strip : wireStrips) {
+                        if (strip.getColor().equals(doorColor)) strip.setDoor(new Door(x, y, doorColor));
+                    }
                 }
             }
         }
         groundImage.dispose();
 
-        // loading wires
-        Pixmap wireImage = new Pixmap(wireFile);
-        wireStrips = WireStrip.load(wireImage);
-        wireImage.dispose();
-
         // creating orbs
+        // TODO loading orbs from map image
         orbs = new ArrayList<EnergyOrb>();
-        orbs.add(new EnergyOrb(2, 2));
+        orbs.add(new EnergyOrb(1, 1));
 
         // create doors
         // TODO creating doors
@@ -138,19 +146,27 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void dispose() {
+        Door.UNLOCKED_IMAGE.dispose();
+        Door.LOCKED_IMAGE.dispose();
         for (byte x = 0; x < ROOM_SIZE; x++) {
             for (byte y = 0; y < ROOM_SIZE; y++) {
                 roomTiles[x][y].dispose();
             }
         }
-
+        for (WireStrip strip : wireStrips) {
+            strip.dispose();
+        }
+        for (EnergyOrb orb : orbs) {
+            orb.dispose();
+        }
         player.dispose();
-
         super.dispose();
     }
 
     @Override
     public void tick(float tickTime) {
+        if (((LD26Game)game).triesAbort()) Gdx.app.exit();
+
         for (byte x = 0; x < LD26Game.ROOM_SIZE; x++) {
             for (byte y = 0; y < LD26Game.ROOM_SIZE; y++) {
                 roomTiles[x][y].tick(tickTime);
@@ -160,8 +176,9 @@ public class RoomScreen extends GameScreen {
         for (WireStrip strip : wireStrips) {
             strip.tick(tickTime);
             if (strip.overlaps(player.getBounds())) {
-                player.setLampColor(strip.getColor());
-                strip.drainEnergy(player, 0.2f * tickTime);
+                if (strip.drainEnergy(player, 0.2f * tickTime)) {
+                    player.setLampColor(strip.getColor());
+                }
             }
         }
 
