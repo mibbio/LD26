@@ -49,6 +49,7 @@ public class Player extends MovableEntity {
         if (Math.abs(energyLevel) < 0.001f) {
             //System.out.println("insufficient energy");
             // TODO energylevel auswerten
+            // TODO energylevel evtl. eher für maximale helligkeit nutzen oder and die raumausleuchtung vom robot koppeln
         }
 
         for (byte x = 0; x < rawImage.getWidth(); x++) {

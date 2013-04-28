@@ -3,13 +3,14 @@ package de.mibbiodev.ld26.tile;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.math.Rectangle;
 import de.mibbiodev.ld26.LD26Game;
+import de.mibbiodev.ld26.Tickable;
 
 import java.util.Random;
 
 /**
  * @author mibbio
  */
-public abstract class Tile {
+public abstract class Tile implements Tickable {
 
     protected static final float DARKEST_SHADE = 0.5f;
     protected static final float BORDER_SHADE = 0.8f;
@@ -51,8 +52,6 @@ public abstract class Tile {
             if (shade > BORDER_SHADE - 0.2f) shade = BORDER_SHADE - 0.2f;
         }
     }
-
-    public abstract void tick(float tickTime);
 
     public abstract Texture getTexture(Color scheme);
 

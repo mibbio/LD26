@@ -27,7 +27,8 @@ public class RoomScreen extends GameScreen {
     private FileHandle wireFile;
     private Tile[][] roomTiles;
 
-    private List<Wire> wires;
+    //private List<Wire> wiresOld;
+    private List<WireStrip> wireStrips;
 
     private Player player;
 
@@ -83,8 +84,12 @@ public class RoomScreen extends GameScreen {
             }
         }
 
-        for (Wire wire : wires) {
-            batch.draw(wire.getTexture(null), wire.getBounds().x, wire.getBounds().y);
+//        for (Wire wire : wiresOld) {
+//            batch.draw(wire.getTexture(null), wire.getBounds().x, wire.getBounds().y);
+//        }
+
+        for (WireStrip strip : wireStrips) {
+            strip.draw(batch);
         }
 
         player.draw(batch);
@@ -118,17 +123,19 @@ public class RoomScreen extends GameScreen {
 
         // loading wires
         Pixmap wireImage = new Pixmap(wireFile);
-        wires = new ArrayList<Wire>();
-        Color color = new Color();
-        for (byte x = 0; x < wireImage.getWidth(); x++) {
-            for (byte y = 0; y < wireImage.getHeight(); y++) {
-                Color.rgba8888ToColor(color, wireImage.getPixel(x, ROOM_SIZE-1-y));
-                if (color.a > 0) {
-                    System.out.println("Alpha " + color.a);
-                    wires.add(new Wire(x, y, color.cpy()));
-                }
-            }
-        }
+        wireStrips = WireStrip.load(wireImage);
+        wireImage.dispose();
+
+//        wiresOld = new ArrayList<Wire>();
+//        Color color = new Color();
+//        for (byte x = 0; x < wireImage.getWidth(); x++) {
+//            for (byte y = 0; y < wireImage.getHeight(); y++) {
+//                Color.rgba8888ToColor(color, wireImage.getPixel(x, ROOM_SIZE-1-y));
+//                if (color.a > 0) {
+//                    wiresOld.add(new Wire(x, y, color.cpy()));
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -157,12 +164,19 @@ public class RoomScreen extends GameScreen {
             }
         }
 
-        for (Wire wire : wires) {
-            wire.tick(tickTime);
-            if (wire.getBounds().overlaps(player.getBounds())) {
-                player.setLampColor(wire.getColor());
+        for (WireStrip strip : wireStrips) {
+            strip.tick(tickTime);
+            if (strip.overlaps(player.getBounds())) {
+                player.setLampColor(strip.getColor());
             }
         }
+
+//        for (Wire wire : wiresOld) {
+//            wire.tick(tickTime);
+//            if (wire.getBounds().overlaps(player.getBounds())) {
+//                player.setLampColor(wire.getColor());
+//            }
+//        }
 
         player.tick(tickTime);
     }

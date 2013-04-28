@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
+import de.mibbiodev.ld26.Tickable;
 import de.mibbiodev.ld26.screen.RoomScreen;
 
 /**
  * @author mibbio
  */
-public abstract class Entity {
+public abstract class Entity implements Tickable {
 
     protected RoomScreen room;
     protected Pixmap rawImage;
