@@ -3,50 +3,60 @@ package de.mibbiodev.ld26.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.mibbiodev.ld26.LD26Game;
 
 /**
  * @author mibbio
  */
-public class SplashScreen implements Screen {
+public class EndScreen implements Screen {
 
     private LD26Game game;
-    private Texture splashTexture;
-    private Sprite splashSprite;
+
     private SpriteBatch batch;
     private BitmapFont font;
 
-    public SplashScreen(LD26Game game) {
+    private CharSequence text;
+    private float duration = 0;
+
+    public EndScreen(LD26Game game, String reason) {
         this.game = game;
+
+        if (reason.equals("dead")) {
+            text = "You ran out of energy!\n\nYour engines\nshut down\nand the last chance\nto escape is gone...";
+        } else if (reason.equals("success")) {
+            text = "congratulation\n\nThere was enough\nenergy in your\nbatteries to activate\nthe teleporter.\n\nNow you're back\nat your mothership.";
+        }
     }
 
     @Override
     public void render(float delta) {
+        duration += delta;
+        if (duration > 15f) {
+            game.handleAbort("back");
+            return;
+        }
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        splashSprite.draw(batch);
+
         float x = Gdx.graphics.getWidth()/2 - 300/2;
-        font.drawMultiLine(batch, "press any key", x, 50, 300, BitmapFont.HAlignment.CENTER);
+        float y = Gdx.graphics.getHeight()/2 + Gdx.graphics.getHeight()/4;
+
+        batch.begin();
+        font.drawMultiLine(batch, text, x, y, 300, BitmapFont.HAlignment.CENTER);
         batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        float dx = (splashTexture.getWidth() - Gdx.graphics.getWidth()) / 2f;
-        float dy = (splashTexture.getHeight() - Gdx.graphics.getHeight()) / 2f;
-        splashSprite.setPosition(dx, dy);
+
     }
 
     @Override
     public void show() {
-        splashTexture = new Texture(Gdx.files.internal("data/ui/splash.png"));
-        splashSprite = new Sprite(splashTexture);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("data/ui/whitefont.fnt"), false);
-        Gdx.input.setInputProcessor(game.getGlobalInput());
     }
 
     @Override
@@ -62,8 +72,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void dispose() {
-        font.dispose();
-        splashTexture.dispose();
         batch.dispose();
+        font.dispose();
     }
 }

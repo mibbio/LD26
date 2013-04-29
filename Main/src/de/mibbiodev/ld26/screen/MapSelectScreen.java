@@ -2,6 +2,7 @@ package de.mibbiodev.ld26.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,10 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import de.mibbiodev.ld26.LD26Game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author mibbio
  */
-public class MainMenuScreen implements Screen {
+public class MapSelectScreen implements Screen {
 
     private LD26Game game;
 
@@ -24,26 +28,17 @@ public class MainMenuScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
 
+    private List<TextButton> buttons;
+
     private ChangeListener buttonListener = new ChangeListener() {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            switch ((int) actor.getY()) {
-                case 300:   // Start Game
-                    game.map = "map01";
-                    game.handleAbort("start");
-                    break;
-                case 200:   // Load Map
-                    game.handleAbort("mapselect");
-                    break;
-                case 100:   // Exit
-                    game.map = "";
-                    game.handleAbort("exit");
-                    break;
-            }
+            TextButton tb = (TextButton) actor;
+            game.handleAbort(tb.getText().toString());
         }
     };
 
-    public MainMenuScreen(LD26Game game) {
+    public MapSelectScreen(LD26Game game) {
         this.game = game;
     }
 
@@ -73,30 +68,34 @@ public class MainMenuScreen implements Screen {
         style.down = skin.getDrawable("buttonpressed");
         style.font = blackFont;
 
-        TextButton btnStartGame = new TextButton("Start Game", style);
-        btnStartGame.setWidth(200);
-        btnStartGame.setHeight(50);
-        btnStartGame.setX(Gdx.graphics.getWidth() / 2 - btnStartGame.getWidth() / 2);
-        btnStartGame.setY(300);
-        btnStartGame.addListener(buttonListener);
+        // generating buttons
+        int count = 0;
+        FileHandle[] test = Gdx.files.internal("maps").list();
+        for (FileHandle handle : test) {
+            if (handle.isDirectory()) {
+                count++;
+                TextButton btn = new TextButton(handle.name(), style);
+                btn.setWidth(200);
+                btn.setHeight(50);
+                if (count <= 5) {
+                    btn.setX(Gdx.graphics.getWidth() / 2 - 225);
+                    btn.setY(Gdx.graphics.getHeight() - 75 * count);
+                } else {
+                    btn.setX(Gdx.graphics.getWidth() / 2 + 25);
+                    btn.setY(Gdx.graphics.getHeight() - 75 * (count-5));
+                }
+                btn.addListener(buttonListener);
+                stage.addActor(btn);
+            }
+        }
 
-        TextButton btnLoadMap = new TextButton("Load Map...", style);
-        btnLoadMap.setWidth(200);
-        btnLoadMap.setHeight(50);
-        btnLoadMap.setX(Gdx.graphics.getWidth() / 2 - btnLoadMap.getWidth() / 2);
-        btnLoadMap.setY(200);
-        btnLoadMap.addListener(buttonListener);
-
-        TextButton btnEndGame = new TextButton("Exit", style);
-        btnEndGame.setWidth(200);
-        btnEndGame.setHeight(50);
-        btnEndGame.setX(Gdx.graphics.getWidth() / 2 - btnEndGame.getWidth() / 2);
-        btnEndGame.setY(100);
-        btnEndGame.addListener(buttonListener);
-
-        stage.addActor(btnStartGame);
-        stage.addActor(btnLoadMap);
-        stage.addActor(btnEndGame);
+        TextButton backButton = new TextButton("back", style);
+        backButton.setWidth(200);
+        backButton.setHeight(50);
+        backButton.setX(Gdx.graphics.getWidth() / 2 - 100);
+        backButton.setY(25);
+        backButton.addListener(buttonListener);
+        stage.addActor(backButton);
     }
 
     @Override
@@ -106,6 +105,7 @@ public class MainMenuScreen implements Screen {
         skin = new Skin();
         skin.addRegions(textureAtlas);
         blackFont = new BitmapFont(Gdx.files.internal("data/ui/blackfont.fnt"), false);
+        buttons = new ArrayList<TextButton>();
     }
 
     @Override

@@ -22,7 +22,5 @@ public class ExitTile extends Tile {
     }
 
     @Override
-    public void tick(float tickTime) {
-        // TODO Auto-generated method stub
-    }
+    public void tick(float tickTime) {}
 }

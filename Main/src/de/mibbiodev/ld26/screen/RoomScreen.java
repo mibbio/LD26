@@ -34,11 +34,16 @@ public class RoomScreen extends GameScreen {
 
     private float timeSinceLastTick = 0;
 
-    public RoomScreen(LD26Game game, Color schemeColor, String mapName) {
+    public RoomScreen(LD26Game game, Color schemeColor, String mapName, boolean custom) {
         super(game);
         this.schemeColor = schemeColor;
-        groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
-        wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
+        if (custom) {
+            groundFile = Gdx.files.internal("maps/" + mapName + "/" + mapName + "_ground.png");
+            wireFile = Gdx.files.internal("maps/" + mapName + "/" + mapName + "_wires.png");
+        } else {
+            groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
+            wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
+        }
     }
 
     public List<Tile> getInsections(Rectangle bounds) {
