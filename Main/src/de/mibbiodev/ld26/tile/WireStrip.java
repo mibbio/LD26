@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Disposable;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.Tickable;
 import de.mibbiodev.ld26.entity.Energized;
+import de.mibbiodev.ld26.screen.RoomScreen;
 
 import java.util.*;
 
@@ -81,9 +82,9 @@ public class WireStrip implements Tickable, Energized, Disposable {
 
     public void draw(SpriteBatch batch) {
         for (Wire wire : wires) {
-            batch.draw(wire.getTexture(null), wire.getBounds().x, wire.getBounds().y);
+            wire.getSprite(null).draw(batch);
         }
-        if (door != null) batch.draw(door.getTexture(null), door.getBounds().x, door.getBounds().y);
+        if (door != null) door.getSprite(color).draw(batch);
     }
 
     public boolean overlaps(Rectangle rect) {
@@ -110,7 +111,7 @@ public class WireStrip implements Tickable, Energized, Disposable {
         return getColor() == tempStrip.getColor();
     }
 
-    public static List<WireStrip> load(Pixmap wireImage) {
+    public static List<WireStrip> load(Pixmap wireImage, RoomScreen room) {
         // separating different WireStrips by color
         Color color = new Color();
         Map<Color, List<Wire>> wireMap = new HashMap<Color, List<Wire>>();
@@ -123,10 +124,10 @@ public class WireStrip implements Tickable, Energized, Disposable {
                     Color keyColor = color.cpy();
                     keyColor.a = 1;
                     if (wireMap.containsKey(keyColor)) {
-                        wireMap.get(keyColor).add(new Wire(x, y, color.cpy()));
+                        wireMap.get(keyColor).add(new Wire(x, y, color.cpy(), null));
                     } else {
                         List<Wire> wireList = new ArrayList<Wire>();
-                        wireList.add(new Wire(x, y, color.cpy()));
+                        wireList.add(new Wire(x, y, color.cpy(), null));
                         wireMap.put(keyColor, wireList);
                     }
                 }

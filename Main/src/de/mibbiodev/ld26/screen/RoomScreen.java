@@ -21,6 +21,7 @@ import java.util.*;
 public class RoomScreen extends GameScreen {
 
     private static final byte ROOM_SIZE = LD26Game.ROOM_SIZE;
+    private static final String TILE_IMG = "data/tile.png";
 
     public String abortReaseon = "";
 
@@ -88,7 +89,7 @@ public class RoomScreen extends GameScreen {
         renderStart();
         for (byte x = 0; x < ROOM_SIZE; x++) {
             for (byte y = 0; y < ROOM_SIZE; y++) {
-                batch.draw(roomTiles[x][y].getTexture(schemeColor), x*LD26Game.TILE_SIZE, y*LD26Game.TILE_SIZE);
+                roomTiles[x][y].getSprite(schemeColor).draw(batch);
             }
         }
 
@@ -97,13 +98,13 @@ public class RoomScreen extends GameScreen {
         }
 
         for (EnergyOrb orb : orbs) {
-            orb.draw(batch);
+            orb.getSprite(Color.WHITE).draw(batch);
         }
 
         player.draw(batch);
 
-
-        String energy = String.format("%.2f", player.getEnergyLevel()*100f);
+        // display battery status
+        String energy = String.format("%.2f", player.getEnergyLevel() * 100f);
         font.draw(batch, "battery status: " + energy + "%", 100, 100);
         renderEnd();
     }
@@ -122,7 +123,7 @@ public class RoomScreen extends GameScreen {
 
         // loading wires
         Pixmap wireImage = new Pixmap(wireFile);
-        wireStrips = WireStrip.load(wireImage);
+        wireStrips = WireStrip.load(wireImage, this);
 
         // creating orbs
         orbs = new ArrayList<EnergyOrb>();
@@ -132,7 +133,7 @@ public class RoomScreen extends GameScreen {
                 int pixel = wireImage.getPixel(x, LD26Game.ROOM_SIZE - 1 - y);
                 Color.rgba8888ToColor(orbpixel, pixel);
                 if (orbpixel.equals(Color.LIGHT_GRAY)) {
-                    orbs.add(new EnergyOrb(x, y));
+                    orbs.add(new EnergyOrb(x, y, null));
                 }
             }
         }
@@ -146,17 +147,17 @@ public class RoomScreen extends GameScreen {
                 int t = groundImage.getPixel(x, ROOM_SIZE-1-y);
 
                 if (t == Color.rgba8888(Color.BLACK)) {
-                    roomTiles[x][y] = new BorderTile(x, y);
+                    roomTiles[x][y] = new BorderTile(x, y, TILE_IMG);
                 } else if (t == Color.rgba8888(Color.WHITE)) {
-                    roomTiles[x][y] = new NormalTile(x, y);
+                    roomTiles[x][y] = new NormalTile(x, y, TILE_IMG);
                 } else  if (t == Color.rgba8888(Color.DARK_GRAY)) {
-                    roomTiles[x][y] = new ExitTile(x, y);
+                    roomTiles[x][y] = new ExitTile(x, y, TILE_IMG);
                 } else {
                     Color doorColor = new Color();
                     Color.rgba8888ToColor(doorColor, t);
-                    roomTiles[x][y] = new NormalTile(x, y);
+                    roomTiles[x][y] = new NormalTile(x, y, TILE_IMG);
                     for (WireStrip strip : wireStrips) {
-                        if (strip.getColor().equals(doorColor)) strip.setDoor(new Door(x, y, doorColor));
+                        if (strip.getColor().equals(doorColor)) strip.setDoor(new Door(x, y, doorColor, null));
                     }
                 }
             }
@@ -196,6 +197,8 @@ public class RoomScreen extends GameScreen {
             orb.dispose();
         }
         font.dispose();
+        Door.LOCKED_TEXTURE.dispose();
+        Door.UNLOCKED_TEXTURE.dispose();
         super.dispose();
     }
 

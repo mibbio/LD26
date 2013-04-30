@@ -1,7 +1,7 @@
 package de.mibbiodev.ld26.tile;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import de.mibbiodev.ld26.LD26Game;
 import de.mibbiodev.ld26.entity.Energized;
 
@@ -18,8 +18,8 @@ public class Wire extends Tile implements Energized {
     protected float pulseStep = 0.2f;
     protected float pulseStrength = 0;
 
-    public Wire(float x, float y, Color color) {
-        super(false, x, y);
+    public Wire(float x, float y, Color color, String srcImage) {
+        super(false, x, y, srcImage);
         this.color = color;
     }
 
@@ -45,11 +45,12 @@ public class Wire extends Tile implements Energized {
     }
 
     @Override
-    public Texture getTexture(Color scheme) {
+    public Sprite getSprite(Color tint) {
+        Pixmap pixelMap = new Pixmap((int)sprite.getWidth(), (int)sprite.getHeight(), Pixmap.Format.RGBA8888);
         pixelMap.setColor(color.cpy().mul(pulseStrength));
-        pixelMap.fillRectangle(MARGIN, MARGIN, pixelMap.getWidth() - (2*MARGIN), pixelMap.getHeight() - (2*MARGIN));
-        tileTexture.draw(pixelMap, 0, 0);
-        return tileTexture;
+        pixelMap.fillRectangle(MARGIN, MARGIN, pixelMap.getWidth() - (2 * MARGIN), pixelMap.getHeight() - (2 * MARGIN));
+        sprite.setTexture(new Texture(pixelMap));
+        return sprite;
     }
 
     @Override

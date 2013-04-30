@@ -45,7 +45,6 @@ public class Player extends MovableEntity implements Energized {
 
     @Override
     public boolean drainEnergy(Energized target, float amount) {
-        //if (energyLevel > 0.95f) return false;
         float targetEnergy = target.getEnergyLevel();
         float myEnergy = this.getEnergyLevel();
 

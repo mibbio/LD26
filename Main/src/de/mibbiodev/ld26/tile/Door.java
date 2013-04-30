@@ -1,57 +1,48 @@
 package de.mibbiodev.ld26.tile;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * @author mibbio
  */
 public class Door extends Tile {
-    public static final String LOCKED_IMAGE = "data/entities/door_locked.png";
-    public static final String UNLOCKED_IMAGE = "data/entities/door_unlocked.png";
+    public static Texture LOCKED_TEXTURE;
+    public static Texture UNLOCKED_TEXTURE;
 
     private Color color;
 
-    public Door(float x, float y, Color color) {
-        super(true, x, y);
+    public Door(float x, float y, Color color, String srcImage) {
+        super(true, x, y, srcImage);
         this.color = color;
-        refreshTexture(LOCKED_IMAGE);
+        texture.dispose();
+        if (LOCKED_TEXTURE == null) {
+            LOCKED_TEXTURE = new Texture(Gdx.files.internal("data/entities/door_locked.png"));
+        }
+        if (UNLOCKED_TEXTURE == null) {
+            UNLOCKED_TEXTURE = new Texture(Gdx.files.internal("data/entities/door_unlocked.png"));
+        }
+        lock();
     }
 
     public void lock() {
         blocked = true;
-        refreshTexture(LOCKED_IMAGE);
     }
 
     public void unlock() {
         blocked = false;
-        refreshTexture(UNLOCKED_IMAGE);
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     @Override
-    public Texture getTexture(Color scheme) {
-        return tileTexture;
+    public Sprite getSprite(Color tint) {
+        if (blocked) sprite.setTexture(LOCKED_TEXTURE);
+        else sprite.setTexture(UNLOCKED_TEXTURE);
+        sprite.setColor(color.cpy());
+        return sprite;
     }
 
     @Override
     public void tick(float tickTime) {}
-
-    private void refreshTexture(String fileName) {
-        Pixmap source = new Pixmap(Gdx.files.internal(fileName));
-        pixelMap.setColor(Color.CLEAR);
-        pixelMap.fill();
-        for (byte x = 0; x < pixelMap.getWidth(); x++) {
-            for (byte y = 0; y < pixelMap.getHeight(); y++) {
-                if (source.getPixel(x, y) == 255) {
-                    pixelMap.drawPixel(x, y, Color.rgba8888(color));
-                }
-            }
-        }
-        source.dispose();
-        tileTexture.draw(pixelMap, 0, 0);
-    }
 }

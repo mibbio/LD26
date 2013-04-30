@@ -1,6 +1,9 @@
 package de.mibbiodev.ld26.tile;
 
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 import de.mibbiodev.ld26.LD26Game;
@@ -18,21 +21,25 @@ public abstract class Tile implements Tickable, Disposable {
 
     protected boolean blocked = false;
     protected float shade;
-    protected Pixmap pixelMap;
-    protected Texture tileTexture;
+    protected Texture texture;
+    protected Sprite sprite;
     protected Rectangle bounds;
 
     protected Random random;
 
-    protected Tile(boolean blocked, float x, float y) {
+    protected Tile(boolean blocked, float x, float y, String srcImage) {
+        if (srcImage == null) srcImage = "data/tile.png";
         this.blocked = blocked;
 
+        // loading image
+        texture = new Texture(Gdx.files.internal(srcImage));
+        sprite = new Sprite(texture);
+        sprite.setPosition(x * LD26Game.TILE_SIZE, y * LD26Game.TILE_SIZE);
+
+        // shading
         random = new Random();
         shade = random.nextFloat();
         clampShade();
-
-        pixelMap = new Pixmap(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
-        tileTexture = new Texture(LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, Pixmap.Format.RGBA8888);
 
         bounds = new Rectangle(x * LD26Game.TILE_SIZE, y * LD26Game.TILE_SIZE, LD26Game.TILE_SIZE, LD26Game.TILE_SIZE);
     }
@@ -56,9 +63,8 @@ public abstract class Tile implements Tickable, Disposable {
 
     @Override
     public void dispose() {
-        tileTexture.dispose();
-        pixelMap.dispose();
+        texture.dispose();
     }
 
-    public abstract Texture getTexture(Color scheme);
+    public abstract Sprite getSprite(Color tint);
 }
