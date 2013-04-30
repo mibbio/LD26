@@ -30,19 +30,15 @@ public abstract class MovableEntity extends Entity {
 
     @Override
     public void tick(float tickTime) {
-        System.out.println(bounds.getWidth() + ":" + bounds.getHeight());
+        System.out.println(bounds.getX() + ":" + bounds.getY());
         Vector2 oldPosition = position.cpy();
-        position.add(velocity.cpy().scl(tickTime * speed));
-        super.tick(tickTime);
+        Vector2 newPosition = position.cpy();
+        newPosition.add(velocity.cpy().scl(tickTime * speed));
+        setPosition(newPosition);
 
         for (Tile tile : room.getInsections(bounds)) {
-            if (this instanceof Player && tile instanceof ExitTile) {
-                room.abortReaseon = "success";
-            }
-            if (!tile.isWalkable()) {
-                position = oldPosition;
-                super.tick(tickTime);
-            }
+            if (this instanceof Player && tile instanceof ExitTile) room.abortReaseon = "success";
+            if (!tile.isWalkable()) setPosition(oldPosition);
         }
     }
 }

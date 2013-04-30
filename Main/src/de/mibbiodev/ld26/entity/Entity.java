@@ -14,7 +14,7 @@ import de.mibbiodev.ld26.screen.RoomScreen;
  */
 public abstract class Entity implements Tickable {
 
-    protected static final float DEFAULT_MARGIN = 4f;
+    protected static final float MARGIN = 4f;
 
     protected RoomScreen room;
     protected Pixmap rawImage;
@@ -29,10 +29,10 @@ public abstract class Entity implements Tickable {
         this.room = room;
         this.renderTexture = new Texture(rawImage);
         bounds = new Rectangle(
-                position.x + DEFAULT_MARGIN,
-                position.y + DEFAULT_MARGIN,
-                rawImage.getWidth() - (DEFAULT_MARGIN*2),
-                rawImage.getHeight() - (DEFAULT_MARGIN*2));
+                position.x + MARGIN,
+                position.y + MARGIN,
+                rawImage.getWidth() - (MARGIN *2),
+                rawImage.getHeight() - (MARGIN *2));
     }
 
     public Vector2 getPosition() {
@@ -41,8 +41,8 @@ public abstract class Entity implements Tickable {
 
     public void setPosition(Vector2 position) {
         this.position = position;
-        bounds.setX(position.x * LD26Game.TILE_SIZE);
-        bounds.setY(position.y * LD26Game.TILE_SIZE);
+        bounds.setX(position.x * LD26Game.TILE_SIZE + MARGIN);
+        bounds.setY(position.y * LD26Game.TILE_SIZE + MARGIN);
     }
 
     public Rectangle getBounds() {
@@ -60,11 +60,6 @@ public abstract class Entity implements Tickable {
     public void dispose() {
         renderTexture.dispose();
         rawImage.dispose();
-    }
-
-    public void tick(float tickTime) {
-        bounds.setX(position.x * LD26Game.TILE_SIZE);
-        bounds.setY(position.y * LD26Game.TILE_SIZE);
     }
 
     public abstract void draw(SpriteBatch batch);
