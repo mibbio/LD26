@@ -23,8 +23,6 @@ public class RoomScreen extends GameScreen {
     private static final byte ROOM_SIZE = LD26Game.ROOM_SIZE;
     private static final String TILE_IMG = "data/tile.png";
 
-    public String abortReaseon = "";
-
     private Color schemeColor;
     private FileHandle groundFile;
     private FileHandle wireFile;
@@ -38,15 +36,15 @@ public class RoomScreen extends GameScreen {
 
     private float timeSinceLastTick = 0;
 
-    public RoomScreen(LD26Game game, Color schemeColor, String mapName, boolean custom) {
+    public RoomScreen(LD26Game game, Color schemeColor, boolean isCustomMap) {
         super(game);
         this.schemeColor = schemeColor;
-        if (custom) {
-            groundFile = Gdx.files.internal("maps/" + mapName + "/" + mapName + "_ground.png");
-            wireFile = Gdx.files.internal("maps/" + mapName + "/" + mapName + "_wires.png");
+        if (isCustomMap) {
+            groundFile = Gdx.files.internal("maps/" + game.map + "/" + game.map + "_ground.png");
+            wireFile = Gdx.files.internal("maps/" + game.map + "/" + game.map + "_wires.png");
         } else {
-            groundFile = Gdx.files.internal("data/maps/" + mapName + "_ground.png");
-            wireFile = Gdx.files.internal("data/maps/" + mapName + "_wires.png");
+            groundFile = Gdx.files.internal("data/maps/" + game.map + "_ground.png");
+            wireFile = Gdx.files.internal("data/maps/" + game.map + "_wires.png");
         }
     }
 
@@ -73,11 +71,7 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void render(float delta) {
-        if (isPaused) return;
-        if (!abortReaseon.equals("")) {
-            game.changeScreen(abortReaseon);
-            return;
-        }
+        if (paused || !running) return;
 
         // calculate tick time
         timeSinceLastTick += delta;
@@ -106,6 +100,7 @@ public class RoomScreen extends GameScreen {
         // display battery status
         String energy = String.format("%.2f", player.getEnergyLevel() * 100f);
         font.draw(batch, "battery status: " + energy + "%", 100, 100);
+
         renderEnd();
     }
 
@@ -234,5 +229,11 @@ public class RoomScreen extends GameScreen {
         }
 
         player.tick(tickTime);
+    }
+
+    @Override
+    public void exitScreen(ExitReason exitReason) {
+        running = false;
+        game.setScreen(new EndScreen(game, exitReason));
     }
 }

@@ -20,13 +20,16 @@ public class EndScreen implements Screen {
     private CharSequence text;
     private float duration = 0;
 
-    public EndScreen(LD26Game game, String reason) {
+    public EndScreen(LD26Game game, ExitReason exitReason) {
         this.game = game;
-
-        if (reason.equals("dead")) {
-            text = "You ran out of energy!\n\nYour engines\nshut down\nand the last chance\nto escape is gone...";
-        } else if (reason.equals("success")) {
-            text = "congratulation\n\nThere was enough\nenergy in your\nbatteries to activate\nthe teleporter.\n\nNow you're back\nat your mothership.";
+        switch (exitReason) {
+            case PLAYER_DEAD:
+                text = "You ran out of energy!\n\nYour engines\nshut down\nand the last chance\nto escape is gone...";
+                break;
+            case MAP_COMPLETED:
+                text = "congratulation\n\nThere was enough\nenergy in your\n" +
+                       "batteries to activate\nthe teleporter.\n\nNow you're back\nat your mothership.";
+                break;
         }
     }
 
@@ -34,7 +37,7 @@ public class EndScreen implements Screen {
     public void render(float delta) {
         duration += delta;
         if (duration > 15f) {
-            game.changeScreen("back");
+            game.setScreen(new MainMenuScreen(game));
             return;
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);

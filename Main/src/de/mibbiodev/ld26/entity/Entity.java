@@ -14,7 +14,7 @@ import de.mibbiodev.ld26.screen.RoomScreen;
  */
 public abstract class Entity implements Tickable {
 
-    protected static final float MARGIN = 4f;
+    protected static final float MARGIN = 2f;
 
     protected RoomScreen room;
     protected Pixmap rawImage;

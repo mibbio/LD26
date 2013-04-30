@@ -2,6 +2,7 @@ package de.mibbiodev.ld26.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,14 +31,14 @@ public class MainMenuScreen implements Screen {
             switch ((int) actor.getY()) {
                 case 300:   // Start Game
                     game.map = "map01";
-                    game.changeScreen("start");
+                    game.setScreen(new RoomScreen(game, Color.GREEN, false));
                     break;
                 case 200:   // Load Map
-                    game.changeScreen("mapselect");
+                    game.setScreen(new MapSelectScreen(game));
                     break;
                 case 100:   // Exit
                     game.map = "";
-                    game.changeScreen("exit");
+                    Gdx.app.exit();
                     break;
             }
         }

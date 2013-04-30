@@ -3,6 +3,7 @@ package de.mibbiodev.ld26.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import de.mibbiodev.ld26.LD26Game;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author mibbio
@@ -28,13 +26,15 @@ public class MapSelectScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
 
-    private List<TextButton> buttons;
-
     private ChangeListener buttonListener = new ChangeListener() {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             TextButton tb = (TextButton) actor;
-            game.changeScreen(tb.getText().toString());
+            if (tb.getText().toString().equals("back")) {
+                game.setScreen(new MainMenuScreen(game));
+            } else {
+                game.setScreen(new RoomScreen(game, Color.ORANGE, true));
+            }
         }
     };
 
@@ -105,7 +105,6 @@ public class MapSelectScreen implements Screen {
         skin = new Skin();
         skin.addRegions(textureAtlas);
         blackFont = new BitmapFont(Gdx.files.internal("data/ui/font/blackfont.fnt"), false);
-        buttons = new ArrayList<TextButton>();
     }
 
     @Override

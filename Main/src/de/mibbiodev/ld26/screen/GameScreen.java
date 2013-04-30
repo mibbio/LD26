@@ -15,7 +15,8 @@ public abstract class GameScreen implements Screen {
     protected LD26Game game;
     protected SpriteBatch batch;
     protected OrthographicCamera camera;
-    protected boolean isPaused = false;
+    protected boolean paused = false;
+    protected boolean running = true;
 
     public GameScreen(LD26Game game) {
         this.game = game;
@@ -48,17 +49,23 @@ public abstract class GameScreen implements Screen {
 
     @Override
     public final void pause() {
-        isPaused = true;
+        paused = true;
     }
 
     @Override
     public final void resume() {
-        isPaused = false;
+        paused = false;
     }
 
     public void dispose() {
         batch.dispose();
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
     public abstract void tick(float tickTime);
+
+    public abstract void exitScreen(ExitReason exitReason);
 }

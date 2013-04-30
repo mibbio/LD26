@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
+import de.mibbiodev.ld26.screen.ExitReason;
 import de.mibbiodev.ld26.screen.RoomScreen;
 import de.mibbiodev.ld26.tile.Wire;
 
@@ -69,6 +70,7 @@ public class Player extends MovableEntity implements Energized {
 
     @Override
     public void tick(float tickTime) {
+        // calculate light pulse
         float maxStrength = Math.min((0.2f + energyLevel), 1.0f);
         lampBrightness += pulseStep * tickTime;
         if (lampBrightness >= maxStrength) {
@@ -79,14 +81,17 @@ public class Player extends MovableEntity implements Energized {
             pulseStep *= -1;
         }
 
+        // TODO don't use energy level for pulse direction / end screen at energy <= 0
+        // calculate energy
         float energyLoss = 0.01f;
         if (energyLevel < 0) energyLevel += energyLoss * tickTime;
         else energyLevel -= energyLoss * tickTime;
 
         if (Math.abs(energyLevel) < 0.02f) {
-            room.abortReaseon = "dead";
+            room.exitScreen(ExitReason.PLAYER_DEAD);
         }
 
+        // TODO optimize
         for (byte x = 0; x < rawImage.getWidth(); x++) {
             for (byte y = 0; y < rawImage.getHeight(); y++) {
                 int pixel = rawImage.getPixel(x, y);

@@ -9,6 +9,7 @@ import de.mibbiodev.ld26.screen.SplashScreen;
 /**
  * @author mibbio
  */
+
 public class GlobalInput implements InputProcessor {
     private static final int KEY_BACK = Input.Keys.ESCAPE;
 
@@ -27,11 +28,11 @@ public class GlobalInput implements InputProcessor {
     public boolean keyUp(int keycode) {
         if (game.getScreen() instanceof MainMenuScreen) return false;
         if (game.getScreen() instanceof SplashScreen) {
-            game.changeScreen("null");
+            game.setScreen(new MainMenuScreen(game));
             return true;
         }
         if (keycode == KEY_BACK) {
-            game.changeScreen("back");
+            //game.changeScreen("back");
         }
         return false;
     }
