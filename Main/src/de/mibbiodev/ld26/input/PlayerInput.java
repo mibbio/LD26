@@ -13,7 +13,7 @@ public class PlayerInput implements InputProcessor {
     private static final int KEY_UP = Input.Keys.W;
     private static final int KEY_DOWN = Input.Keys.S;
     private static final int KEY_LEFT = Input.Keys.A;
-    private static final int KEY_RIHT = Input.Keys.D;
+    private static final int KEY_RIGHT = Input.Keys.D;
 
     private Player player;
     private int currentMovement = -1;
@@ -25,7 +25,6 @@ public class PlayerInput implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (currentMovement > -1) return false;
-
         currentMovement = keycode;
         switch (keycode) {
             case KEY_DOWN:
@@ -36,7 +35,7 @@ public class PlayerInput implements InputProcessor {
                 player.setOrientation(Orientation.WEST);
                 player.getVelocity().x = -1;
                 return true;
-            case KEY_RIHT:
+            case KEY_RIGHT:
                 player.setOrientation(Orientation.EAST);
                 player.getVelocity().x = 1;
                 return true;
@@ -54,16 +53,10 @@ public class PlayerInput implements InputProcessor {
         currentMovement = -1;
         switch (keycode) {
             case KEY_DOWN:
-                player.getVelocity().y = 0;
-                return true;
             case KEY_LEFT:
-                player.getVelocity().x = 0;
-                return true;
-            case KEY_RIHT:
-                player.getVelocity().x = 0;
-                return true;
+            case KEY_RIGHT:
             case KEY_UP:
-                player.getVelocity().y = 0;
+                player.getVelocity().set(0, 0);
                 return true;
         }
         return false;

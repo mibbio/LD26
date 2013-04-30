@@ -34,7 +34,7 @@ public class MapSelectScreen implements Screen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             TextButton tb = (TextButton) actor;
-            game.handleAbort(tb.getText().toString());
+            game.changeScreen(tb.getText().toString());
         }
     };
 
@@ -104,7 +104,7 @@ public class MapSelectScreen implements Screen {
         textureAtlas = new TextureAtlas("data/ui/button.pack");
         skin = new Skin();
         skin.addRegions(textureAtlas);
-        blackFont = new BitmapFont(Gdx.files.internal("data/ui/blackfont.fnt"), false);
+        blackFont = new BitmapFont(Gdx.files.internal("data/ui/font/blackfont.fnt"), false);
         buttons = new ArrayList<TextButton>();
     }
 

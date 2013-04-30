@@ -30,6 +30,7 @@ public abstract class MovableEntity extends Entity {
 
     @Override
     public void tick(float tickTime) {
+        System.out.println(bounds.getWidth() + ":" + bounds.getHeight());
         Vector2 oldPosition = position.cpy();
         position.add(velocity.cpy().scl(tickTime * speed));
         super.tick(tickTime);

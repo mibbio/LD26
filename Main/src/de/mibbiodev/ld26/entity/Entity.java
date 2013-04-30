@@ -14,6 +14,8 @@ import de.mibbiodev.ld26.screen.RoomScreen;
  */
 public abstract class Entity implements Tickable {
 
+    protected static final float DEFAULT_MARGIN = 4f;
+
     protected RoomScreen room;
     protected Pixmap rawImage;
     protected Texture renderTexture;
@@ -26,7 +28,11 @@ public abstract class Entity implements Tickable {
         this.rawImage = rawImage;
         this.room = room;
         this.renderTexture = new Texture(rawImage);
-        bounds = new Rectangle(position.x, position.y, rawImage.getWidth(), rawImage.getHeight());
+        bounds = new Rectangle(
+                position.x + DEFAULT_MARGIN,
+                position.y + DEFAULT_MARGIN,
+                rawImage.getWidth() - (DEFAULT_MARGIN*2),
+                rawImage.getHeight() - (DEFAULT_MARGIN*2));
     }
 
     public Vector2 getPosition() {

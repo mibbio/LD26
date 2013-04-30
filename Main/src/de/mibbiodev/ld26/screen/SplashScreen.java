@@ -45,7 +45,7 @@ public class SplashScreen implements Screen {
         splashTexture = new Texture(Gdx.files.internal("data/ui/splash.png"));
         splashSprite = new Sprite(splashTexture);
         batch = new SpriteBatch();
-        font = new BitmapFont(Gdx.files.internal("data/ui/whitefont.fnt"), false);
+        font = new BitmapFont(Gdx.files.internal("data/ui/font/whitefont.fnt"), false);
         Gdx.input.setInputProcessor(game.getGlobalInput());
     }
 

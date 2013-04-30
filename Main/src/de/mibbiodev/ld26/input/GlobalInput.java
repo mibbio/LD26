@@ -27,11 +27,11 @@ public class GlobalInput implements InputProcessor {
     public boolean keyUp(int keycode) {
         if (game.getScreen() instanceof MainMenuScreen) return false;
         if (game.getScreen() instanceof SplashScreen) {
-            game.handleAbort("null");
+            game.changeScreen("null");
             return true;
         }
         if (keycode == KEY_BACK) {
-            game.handleAbort("back");
+            game.changeScreen("back");
         }
         return false;
     }

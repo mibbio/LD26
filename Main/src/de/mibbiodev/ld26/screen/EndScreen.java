@@ -34,7 +34,7 @@ public class EndScreen implements Screen {
     public void render(float delta) {
         duration += delta;
         if (duration > 15f) {
-            game.handleAbort("back");
+            game.changeScreen("back");
             return;
         }
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -56,7 +56,7 @@ public class EndScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        font = new BitmapFont(Gdx.files.internal("data/ui/whitefont.fnt"), false);
+        font = new BitmapFont(Gdx.files.internal("data/ui/font/whitefont.fnt"), false);
     }
 
     @Override

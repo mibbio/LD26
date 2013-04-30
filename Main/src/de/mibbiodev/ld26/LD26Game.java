@@ -62,7 +62,7 @@ public class LD26Game extends Game {
         return soundManager;
     }
 
-    public void handleAbort(String reason) {
+    public void changeScreen(String reason) {
         if(getScreen() instanceof GameScreen) {
             if (reason.equals("back")) setScreen(new MainMenuScreen(this));
             else setScreen(new EndScreen(this, reason));
@@ -76,7 +76,9 @@ public class LD26Game extends Game {
             setScreen(new MainMenuScreen(this));
         } else if (getScreen() instanceof MapSelectScreen) {
             if (reason.equals("back")) setScreen(new MainMenuScreen(this));
-            else setScreen(new RoomScreen(this, Color.GREEN, map, true));
+            else {
+                setScreen(new RoomScreen(this, Color.GREEN, map, true));
+            }
         }
     }
 

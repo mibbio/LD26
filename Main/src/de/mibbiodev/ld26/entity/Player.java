@@ -13,7 +13,6 @@ import de.mibbiodev.ld26.tile.Wire;
  * @author mibbio
  */
 public class Player extends MovableEntity implements Energized {
-
     private Pixmap renderImage;
     private Color lampColor = Color.WHITE;
     private float lampBrightness = 0;
@@ -46,7 +45,7 @@ public class Player extends MovableEntity implements Energized {
 
     @Override
     public boolean drainEnergy(Energized target, float amount) {
-        if (energyLevel > 0.95f) return false;
+        //if (energyLevel > 0.95f) return false;
         float targetEnergy = target.getEnergyLevel();
         float myEnergy = this.getEnergyLevel();
 

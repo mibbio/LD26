@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.LD26Game;
@@ -31,6 +32,8 @@ public class RoomScreen extends GameScreen {
     private List<WireStrip> wireStrips;
     private List<EnergyOrb> orbs;
     private Player player;
+
+    private BitmapFont font;
 
     private float timeSinceLastTick = 0;
 
@@ -71,7 +74,7 @@ public class RoomScreen extends GameScreen {
     public void render(float delta) {
         if (isPaused) return;
         if (!abortReaseon.equals("")) {
-            game.handleAbort(abortReaseon);
+            game.changeScreen(abortReaseon);
             return;
         }
 
@@ -98,6 +101,10 @@ public class RoomScreen extends GameScreen {
         }
 
         player.draw(batch);
+
+
+        String energy = String.format("%.2f", player.getEnergyLevel()*100f);
+        font.draw(batch, "battery status: " + energy + "%", 100, 100);
         renderEnd();
     }
 
@@ -109,6 +116,9 @@ public class RoomScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
+
+        // loading font
+        font = new BitmapFont(Gdx.files.internal("data/ui/font/whitefont16.fnt"), false);
 
         // loading wires
         Pixmap wireImage = new Pixmap(wireFile);
@@ -156,7 +166,7 @@ public class RoomScreen extends GameScreen {
         player = new Player(
                 new Pixmap(Gdx.files.internal("data/entities/player2.png")),
                 new Vector2(2, 2),
-                2f, this
+                4f, this
         );
 
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -185,6 +195,7 @@ public class RoomScreen extends GameScreen {
         for (EnergyOrb orb : orbs) {
             orb.dispose();
         }
+        font.dispose();
         super.dispose();
     }
 

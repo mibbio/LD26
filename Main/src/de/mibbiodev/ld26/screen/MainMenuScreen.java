@@ -30,14 +30,14 @@ public class MainMenuScreen implements Screen {
             switch ((int) actor.getY()) {
                 case 300:   // Start Game
                     game.map = "map01";
-                    game.handleAbort("start");
+                    game.changeScreen("start");
                     break;
                 case 200:   // Load Map
-                    game.handleAbort("mapselect");
+                    game.changeScreen("mapselect");
                     break;
                 case 100:   // Exit
                     game.map = "";
-                    game.handleAbort("exit");
+                    game.changeScreen("exit");
                     break;
             }
         }
@@ -105,7 +105,7 @@ public class MainMenuScreen implements Screen {
         textureAtlas = new TextureAtlas("data/ui/button.pack");
         skin = new Skin();
         skin.addRegions(textureAtlas);
-        blackFont = new BitmapFont(Gdx.files.internal("data/ui/blackfont.fnt"), false);
+        blackFont = new BitmapFont(Gdx.files.internal("data/ui/font/blackfont.fnt"), false);
     }
 
     @Override
