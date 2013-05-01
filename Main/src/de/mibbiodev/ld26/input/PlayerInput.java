@@ -2,6 +2,7 @@ package de.mibbiodev.ld26.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 import de.mibbiodev.ld26.entity.Orientation;
 import de.mibbiodev.ld26.entity.Player;
 
@@ -24,8 +25,8 @@ public class PlayerInput implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (currentMovement > -1) return false;
-
+        //if (currentMovement > -1) return false;
+        if (keycode != currentMovement) player.setVelocity(Vector2.Zero.cpy());
         currentMovement = keycode;
         switch (keycode) {
             case KEY_DOWN:
@@ -54,16 +55,10 @@ public class PlayerInput implements InputProcessor {
         currentMovement = -1;
         switch (keycode) {
             case KEY_DOWN:
-                player.getVelocity().y = 0;
-                return true;
             case KEY_LEFT:
-                player.getVelocity().x = 0;
-                return true;
             case KEY_RIHT:
-                player.getVelocity().x = 0;
-                return true;
             case KEY_UP:
-                player.getVelocity().y = 0;
+                player.setVelocity(Vector2.Zero.cpy());
                 return true;
         }
         return false;
