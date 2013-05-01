@@ -31,7 +31,7 @@ public class MainMenuScreen implements Screen {
             switch ((int) actor.getY()) {
                 case 300:   // Start Game
                     game.map = "map01";
-                    game.setScreen(new RoomScreen(game, Color.GREEN, false));
+                    game.setScreen(new RoomScreen(game, Color.WHITE, false));
                     break;
                 case 200:   // Load Map
                     game.setScreen(new MapSelectScreen(game));

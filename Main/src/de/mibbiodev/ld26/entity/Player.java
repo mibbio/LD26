@@ -49,6 +49,8 @@ public class Player extends MovableEntity implements Energized {
         float targetEnergy = target.getEnergyLevel();
         float myEnergy = this.getEnergyLevel();
 
+        // TODO calcutale transfered energy precisely
+
         if (targetEnergy > amount && (1-myEnergy) > amount) {
             targetEnergy -= amount;
             myEnergy += amount;
@@ -70,6 +72,7 @@ public class Player extends MovableEntity implements Energized {
 
     @Override
     public void tick(float tickTime) {
+        if (!room.isRunning()) return;
         // calculate light pulse
         float maxStrength = Math.min((0.2f + energyLevel), 1.0f);
         lampBrightness += pulseStep * tickTime;
@@ -89,6 +92,7 @@ public class Player extends MovableEntity implements Energized {
 
         if (Math.abs(energyLevel) < 0.02f) {
             room.exitScreen(ExitReason.PLAYER_DEAD);
+            return;
         }
 
         // TODO optimize

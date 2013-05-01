@@ -71,7 +71,9 @@ public class RoomScreen extends GameScreen {
 
     @Override
     public void render(float delta) {
-        if (paused || !running) return;
+        if (paused || !running) {
+            return;
+        }
 
         // calculate tick time
         timeSinceLastTick += delta;
@@ -215,7 +217,6 @@ public class RoomScreen extends GameScreen {
             }
         }
 
-
         for (Iterator<EnergyOrb> orbIterator = orbs.iterator(); orbIterator.hasNext();) {
             EnergyOrb orb = orbIterator.next();
             if (orb.getEnergyLevel() <= 0.01f) {
@@ -234,6 +235,7 @@ public class RoomScreen extends GameScreen {
     @Override
     public void exitScreen(ExitReason exitReason) {
         running = false;
+        // FIXME bug on playerdeath
         game.setScreen(new EndScreen(game, exitReason));
     }
 }

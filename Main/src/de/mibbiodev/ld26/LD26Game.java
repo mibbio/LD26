@@ -4,8 +4,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import de.mibbiodev.ld26.input.GlobalInput;
-import de.mibbiodev.ld26.screen.RoomScreen;
 import de.mibbiodev.ld26.screen.SplashScreen;
+
+import java.lang.reflect.Field;
 
 /**
  * @author mibbio
@@ -26,6 +27,20 @@ public class LD26Game extends Game {
 
     @Override
     public void create() {
+        // TODO use this for randomize level color scheme
+        Field[] f = Color.class.getFields();
+        for (Field field : f) {
+            String name = field.getName();
+            if (name.matches("^[A-Z]*$") && !name.equals("BLACK") && !name.equals("CLEAR")) {
+                try {
+                    System.out.println(field.get(field));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
         if (Gdx.app.getType() == Application.ApplicationType.Desktop){
             Gdx.app.getGraphics().setDisplayMode(
                     LD26Game.TILE_SIZE * LD26Game.ROOM_SIZE,
@@ -60,35 +75,4 @@ public class LD26Game extends Game {
     public SoundManager getSoundManager() {
         return soundManager;
     }
-
-    public void runMap(String mapName) {
-        this.map = mapName;
-        setScreen(new RoomScreen(this, Color.ORANGE, true));
-    }
-
-    /*
-    public void changeScreen(String reason) {
-        if(getScreen() instanceof GameScreen) {
-            if (reason.equals("back")) setScreen(new MainMenuScreen(this));
-            else setScreen(new EndScreen(this, reason));
-
-        } else if (getScreen() instanceof SplashScreen) {
-            setScreen(new MainMenuScreen(this));
-
-        } else if (getScreen() instanceof MainMenuScreen) {
-            if (reason.equals("mapselect")) setScreen(new MapSelectScreen(this));
-            if (reason.equals("exit")) Gdx.app.exit();
-            if (reason.equals("start")) setScreen(new RoomScreen(this, Color.GREEN, map, false));
-
-        } else if (getScreen() instanceof EndScreen) {
-            setScreen(new MainMenuScreen(this));
-
-        } else if (getScreen() instanceof MapSelectScreen) {
-            if (reason.equals("back")) setScreen(new MainMenuScreen(this));
-            else {
-                setScreen(new RoomScreen(this, Color.GREEN, map, true));
-            }
-        }
-    }*/
-
 }

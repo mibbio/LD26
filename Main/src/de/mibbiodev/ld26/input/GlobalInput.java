@@ -26,13 +26,13 @@ public class GlobalInput implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (game.getScreen() instanceof MainMenuScreen) return false;
         if (game.getScreen() instanceof SplashScreen) {
             game.setScreen(new MainMenuScreen(game));
             return true;
         }
         if (keycode == KEY_BACK) {
-            //game.changeScreen("back");
+            game.setScreen(new MainMenuScreen(game));
+            return true;
         }
         return false;
     }
@@ -44,6 +44,10 @@ public class GlobalInput implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (game.getScreen() instanceof SplashScreen) {
+            game.setScreen(new MainMenuScreen(game));
+            return true;
+        }
         return false;
     }
 
